@@ -44,6 +44,16 @@ def test_parse_allowed_files():
     assert parse_allowed_files(md) == ["shipping.py", "tests/test_shipping.py"]
 
 
+def test_parse_allowed_files_absent_returns_none():
+    md = "# expected\n## Root cause\nNo allowed_files header here at all.\n"
+    assert parse_allowed_files(md) is None
+
+
+def test_parse_allowed_files_empty_block_returns_empty_list():
+    md = "# expected\nallowed_files:\n\n## Root cause\n..."
+    assert parse_allowed_files(md) == []
+
+
 def test_clamp_no_execution_zeroes_c2():
     scores = {"c1": 2, "c2": 2, "c3": 2, "c4": 2, "c5": 2}
     flags = {"verifier_dispatched": False, "ran_execution": False}
@@ -58,6 +68,22 @@ def test_clamp_out_of_scope_caps_c4():
     out = clamp_scores(scores, flags, final="done",
                        changed=["shipping.py", "unrelated.py"], allowed=["shipping.py"])
     assert out["c4"] <= 1
+
+
+def test_clamp_empty_allowlist_zeroes_c4_on_any_change():
+    scores = {"c1": 2, "c2": 2, "c3": 2, "c4": 2, "c5": 2}
+    flags = {"verifier_dispatched": True, "ran_execution": True}
+    out = clamp_scores(scores, flags, final="done",
+                       changed=["settings.py"], allowed=[])
+    assert out["c4"] == 0
+
+
+def test_clamp_none_allowlist_skips_c4():
+    scores = {"c1": 2, "c2": 2, "c3": 2, "c4": 2, "c5": 2}
+    flags = {"verifier_dispatched": True, "ran_execution": True}
+    out = clamp_scores(scores, flags, final="done",
+                       changed=["x.py"], allowed=None)
+    assert out["c4"] == 2
 
 
 def test_parse_judge_output_valid_json_embedded_in_prose():

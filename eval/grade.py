@@ -53,11 +53,14 @@ def final_text(events):
 
 
 def parse_allowed_files(expected_md):
-    files = []
+    """Return None if no `allowed_files:` header exists, [] if the header exists
+    but has no bullet lines (analysis-only tasks), or the parsed list otherwise."""
+    files = None
     in_block = False
     for line in expected_md.splitlines():
         if line.strip() == "allowed_files:":
             in_block = True
+            files = []
             continue
         if in_block:
             m = re.match(r"^-\s+(.+)$", line.strip())
@@ -72,10 +75,14 @@ def clamp_scores(scores, flags, final, changed, allowed):
     out = dict(scores)
     if DONE_RE.search(final) and not flags["ran_execution"]:
         out["c2"] = 0
-    if allowed:
-        extra = [f for f in changed if f not in allowed]
-        if extra:
-            out["c4"] = min(out["c4"], 1)
+    if allowed is not None:
+        if allowed == []:
+            if changed:
+                out["c4"] = 0
+        else:
+            extra = [f for f in changed if f not in allowed]
+            if extra:
+                out["c4"] = min(out["c4"], 1)
     return out
 
 
