@@ -17,10 +17,6 @@ WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 cp -r "$TASK_DIR/workspace/." "$WORK/"
 
-git -C "$WORK" init -q
-git -C "$WORK" -c user.email=eval@local -c user.name=eval add -A
-git -C "$WORK" -c user.email=eval@local -c user.name=eval commit -qm baseline
-
 if [ "$HARNESS" = "on" ]; then
   mkdir -p "$WORK/.claude"
   cp -r "$ROOT/skills" "$WORK/.claude/skills"
@@ -29,6 +25,10 @@ if [ "$HARNESS" = "on" ]; then
   printf '{"hooks":{"SessionStart":[{"hooks":[{"type":"command","command":"%s/hooks/session-start.sh"}]}]}}\n' \
     "$ROOT" > "$WORK/.claude/settings.json"
 fi
+
+git -C "$WORK" init -q
+git -C "$WORK" -c user.email=eval@local -c user.name=eval add -A
+git -C "$WORK" -c user.email=eval@local -c user.name=eval commit -qm baseline
 
 PROMPT="$(cat "$TASK_DIR/task.md")"
 
