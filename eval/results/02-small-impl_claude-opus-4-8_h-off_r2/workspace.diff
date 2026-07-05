@@ -1,0 +1,28 @@
+diff --git a/stats.py b/stats.py
+index aac6e5b..bd45ca2 100644
+--- a/stats.py
++++ b/stats.py
+@@ -1,3 +1,4 @@
++import json
+ import sys
+ 
+ 
+@@ -11,9 +12,17 @@ def compute(numbers):
+ 
+ 
+ def main():
+-    path = sys.argv[1]
++    args = sys.argv[1:]
++    as_json = False
++    if "--json" in args:
++        as_json = True
++        args = [a for a in args if a != "--json"]
++    path = args[0]
+     numbers = [float(line) for line in open(path) if line.strip()]
+     s = compute(numbers)
++    if as_json:
++        print(json.dumps(s))
++        return
+     print(f"count: {s['count']}")
+     print(f"mean: {s['mean']:.2f}")
+     print(f"min: {s['min']}")

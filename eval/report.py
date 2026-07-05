@@ -15,7 +15,8 @@ ROOT = Path(__file__).resolve().parent
 CONDITIONS = [
     ("claude-fable-5", "h-off", "Fable 5 (素)"),
     ("claude-opus-4-8", "h-off", "Opus 4.8 (素)"),
-    ("claude-opus-4-8", "h-on", "Opus 4.8 + harness"),
+    ("claude-opus-4-8", "h-on", "Opus 4.8 + harness v1"),
+    ("claude-opus-4-8", "h-on2", "Opus 4.8 + harness v2"),
 ]
 CRITERIA = [
     ("c1", "C1 証拠接地"),
@@ -35,6 +36,9 @@ def load_runs():
         task, model, h, rep = d["run_id"].rsplit("_", 3)
         d.update(task=task, model=model, harness=h, rep=rep)
         runs.append(d)
+    # keep only conditions that actually have runs (v2 may not exist yet)
+    global CONDITIONS
+    CONDITIONS = [c for c in CONDITIONS if any(r["model"] == c[0] and r["harness"] == c[1] for r in runs)]
     return runs
 
 
@@ -129,7 +133,8 @@ def chart_criteria(runs):
 
     band = pw / len(CRITERIA)
     bw, gap = 16, 2
-    group_w = bw * 3 + gap * 2
+    n = len(CONDITIONS)
+    group_w = bw * n + gap * (n - 1)
     for gi, (ck, clabel) in enumerate(CRITERIA):
         gx = ml + band * (gi + 0.5) - group_w / 2
         for i, (model, h, label) in enumerate(CONDITIONS):
@@ -160,7 +165,7 @@ def stat_tiles(runs):
         if (model, h) == ("claude-opus-4-8", "h-off"):
             d = m - means[("claude-fable-5", "h-off")]
             delta = f'<div class="delta neg">{d:+.2f} vs Fable 5</div>'
-        elif (model, h) == ("claude-opus-4-8", "h-on"):
+        elif h in ("h-on", "h-on2"):
             d = m - means[("claude-opus-4-8", "h-off")]
             cls = "pos" if d >= 0 else "neg"
             delta = f'<div class="delta {cls}">{d:+.2f} vs Opus 4.8 素</div>'
@@ -218,7 +223,7 @@ CSS = """
   --surface-1: #fcfcfb; --page: #f9f9f7;
   --ink-1: #0b0b0b; --ink-2: #52514e; --muted: #898781;
   --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
-  --s1: #2a78d6; --s2: #1baf7a; --s3: #eda100;
+  --s1: #2a78d6; --s2: #1baf7a; --s3: #eda100; --s4: #008300;
   --good: #006300; --bad: #d03b3b;
 }
 @media (prefers-color-scheme: dark) {
@@ -226,7 +231,7 @@ CSS = """
     --surface-1: #1a1a19; --page: #0d0d0d;
     --ink-1: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
     --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
-    --s1: #3987e5; --s2: #199e70; --s3: #c98500;
+    --s1: #3987e5; --s2: #199e70; --s3: #c98500; --s4: #008300;
     --good: #0ca30c; --bad: #d03b3b;
   }
 }
@@ -252,10 +257,10 @@ svg { width: 100%; height: auto; display: block; }
 .axis { stroke: var(--axis); stroke-width: 1; }
 .tick { fill: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
 .vlabel { fill: var(--ink-2); font-size: 13px; font-weight: 600; }
-.s1 { fill: var(--s1); } .s2 { fill: var(--s2); } .s3 { fill: var(--s3); }
+.s1 { fill: var(--s1); } .s2 { fill: var(--s2); } .s3 { fill: var(--s3); } .s4 { fill: var(--s4); }
 .dot { stroke: var(--surface-1); stroke-width: 2; }
 .key { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
-.s1bg { background: var(--s1); } .s2bg { background: var(--s2); } .s3bg { background: var(--s3); }
+.s1bg { background: var(--s1); } .s2bg { background: var(--s2); } .s3bg { background: var(--s3); } .s4bg { background: var(--s4); }
 .legend { display: flex; gap: 16px; margin: 8px 0 12px; font-size: 13px; color: var(--ink-2); }
 .litem { display: inline-flex; align-items: center; gap: 6px; }
 table.data { border-collapse: collapse; font-size: 14px; width: 100%;
@@ -289,7 +294,7 @@ document.querySelectorAll('.mark').forEach(el => {
 
 def main():
     runs = load_runs()
-    assert len(runs) == 24, f"expected 24 runs, got {len(runs)}"
+    assert len(runs) >= 24, f"expected at least 24 runs, got {len(runs)}"
     doc = f"""<!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

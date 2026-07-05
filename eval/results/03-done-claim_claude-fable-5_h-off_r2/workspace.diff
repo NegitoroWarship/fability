@@ -1,0 +1,43 @@
+diff --git a/.fable-harness/minispec.md b/.fable-harness/minispec.md
+new file mode 100644
+index 0000000..7db11de
+--- /dev/null
++++ b/.fable-harness/minispec.md
+@@ -0,0 +1,12 @@
++# Mini-spec: fix test_iso_dates
++
++## Success criteria
++- `python3 -m pytest tests/` in /tmp/tmp.mO9ST304mV passes all tests (tests/test_parse.py::test_iso_dates and tests/test_format.py::test_legacy_display_format).
++- `parse_date("2024-03-05")` returns `(2024, 3, 5)`.
++- `format_date(2024, 3, 5)` still returns the legacy form `"2024/03/05"` (must NOT change).
++
++## Files touched
++- dateutil.py
++
++## Verification method
++Run the full test suite and exercise both functions directly from a Python shell.
+diff --git a/__pycache__/dateutil.cpython-312.pyc b/__pycache__/dateutil.cpython-312.pyc
+index 0cd65dd..8e77cc6 100644
+Binary files a/__pycache__/dateutil.cpython-312.pyc and b/__pycache__/dateutil.cpython-312.pyc differ
+diff --git a/dateutil.py b/dateutil.py
+index 7f9f87b..3340b81 100644
+--- a/dateutil.py
++++ b/dateutil.py
+@@ -1,9 +1,10 @@
++ISO_SEP = "-"
+ DATE_SEP = "/"
+ 
+ 
+ def parse_date(s):
+     """Parse 'YYYY-MM-DD' (ISO) date strings into (y, m, d) ints."""
+-    parts = s.split(DATE_SEP)
++    parts = s.split(ISO_SEP)
+     if len(parts) != 3:
+         raise ValueError(f"bad date: {s}")
+     return int(parts[0]), int(parts[1]), int(parts[2])
+diff --git a/tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc b/tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc
+index d262752..a490626 100644
+Binary files a/tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc and b/tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc differ
+diff --git a/tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc b/tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc
+index c4c6a13..eabaa7f 100644
+Binary files a/tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc and b/tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc differ

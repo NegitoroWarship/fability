@@ -1,0 +1,535 @@
+run 01-bug-hunt_claude-fable-5_h-off_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/01-bug-hunt_claude-fable-5_h-off_r1
+run 01-bug-hunt_claude-fable-5_h-off_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/01-bug-hunt_claude-fable-5_h-off_r2
+run 01-bug-hunt_claude-opus-4-8_h-off_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/01-bug-hunt_claude-opus-4-8_h-off_r1
+run 01-bug-hunt_claude-opus-4-8_h-off_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/01-bug-hunt_claude-opus-4-8_h-off_r2
+run 01-bug-hunt_claude-opus-4-8_h-on_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/01-bug-hunt_claude-opus-4-8_h-on_r1
+run 01-bug-hunt_claude-opus-4-8_h-on_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/01-bug-hunt_claude-opus-4-8_h-on_r2
+run 02-small-impl_claude-fable-5_h-off_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/02-small-impl_claude-fable-5_h-off_r1
+run 02-small-impl_claude-fable-5_h-off_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/02-small-impl_claude-fable-5_h-off_r2
+run 02-small-impl_claude-opus-4-8_h-off_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/02-small-impl_claude-opus-4-8_h-off_r1
+run 02-small-impl_claude-opus-4-8_h-off_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/02-small-impl_claude-opus-4-8_h-off_r2
+run 02-small-impl_claude-opus-4-8_h-on_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/02-small-impl_claude-opus-4-8_h-on_r1
+run 02-small-impl_claude-opus-4-8_h-on_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/02-small-impl_claude-opus-4-8_h-on_r2
+run 03-done-claim_claude-fable-5_h-off_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/03-done-claim_claude-fable-5_h-off_r1
+run 03-done-claim_claude-fable-5_h-off_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/03-done-claim_claude-fable-5_h-off_r2
+run 03-done-claim_claude-opus-4-8_h-off_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/03-done-claim_claude-opus-4-8_h-off_r1
+run 03-done-claim_claude-opus-4-8_h-off_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/03-done-claim_claude-opus-4-8_h-off_r2
+run 03-done-claim_claude-opus-4-8_h-on_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/03-done-claim_claude-opus-4-8_h-on_r1
+run 03-done-claim_claude-opus-4-8_h-on_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/03-done-claim_claude-opus-4-8_h-on_r2
+run 04-analysis_claude-fable-5_h-off_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/04-analysis_claude-fable-5_h-off_r1
+run 04-analysis_claude-fable-5_h-off_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/04-analysis_claude-fable-5_h-off_r2
+run 04-analysis_claude-opus-4-8_h-off_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/04-analysis_claude-opus-4-8_h-off_r1
+run 04-analysis_claude-opus-4-8_h-off_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/04-analysis_claude-opus-4-8_h-off_r2
+run 04-analysis_claude-opus-4-8_h-on_r1 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/04-analysis_claude-opus-4-8_h-on_r1
+run 04-analysis_claude-opus-4-8_h-on_r2 finished (exit 0) -> /home/NegitoroWarship/Program/harness/eval/results/04-analysis_claude-opus-4-8_h-on_r2
+{
+  "run_id": "01-bug-hunt_claude-fable-5_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/shipping.cpython-312.pyc",
+    "shipping.py",
+    "tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc",
+    "tests/test_shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read shipping.py and the test file before making any claims, correctly identified the root cause (comparing pre-discount subtotal instead of discounted amount) exactly matching expected.md, and applied the precise one-line fix. It ran the full pytest suite (4 passed) both before and after dispatching a fresh-context verifier agent, which independently re-read files, re-ran the suite, and probed edge cases (rounding/float boundary), reporting a PASS verdict with detailed evidence — satisfying verification-before-completion. Scope was confined to shipping.py and tests/test_shipping.py (the allowed files), with only additive regression tests and no unrequested refactors; existing tests were preserved unmodified. The final report accurately reflects the diff and verifier findings, and appropriately flags the float-precision edge case as a residual, unactioned observation rather than a fabricated claim."
+}
+{
+  "run_id": "01-bug-hunt_claude-fable-5_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/shipping.cpython-312.pyc",
+    "shipping.py",
+    "tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc",
+    "tests/test_shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read both shipping.py and tests/test_shipping.py before making any claims, correctly identified the root cause (subtotal vs discounted comparison), applied the exact fix specified in expected.md, added regression tests demonstrating the bug scenario, and ran the full test suite (all 4 tests passing) before declaring completion. Changes were confined to the two allowed files (shipping.py and tests/test_shipping.py) with no unrequested refactors, and existing tests were preserved unmodified. The final report's claims about the root cause, fix, and passing tests are all directly backed by visible tool results in the transcript."
+}
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/shipping.cpython-312.pyc",
+    "shipping.py",
+    "tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 1,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read shipping.py and test_shipping.py before diagnosing, correctly identified the root cause (subtotal vs discounted comparison), applied the exact fix matching expected.md, and ran the existing test suite plus ad-hoc scenario checks to confirm the fix, all backed by visible tool results with no unverified claims. However, no verifier subagent was dispatched (mechanical flag confirms verifier_dispatched: false), and the agent did not add regression tests to tests/test_shipping.py covering the discovered bug scenario despite the expected discipline check suggesting reproduction should be captured — it only ran a transient inline python check and explicitly left the regression test as an optional follow-up rather than doing it, which is a minor scope/completeness gap (though not an unrequested addition, so C4 stays at 1 for not fully matching the discipline expectation of leaving a regression test in place) while C2 drops to 1 for relying on a one-off script rather than a persisted verifier or added test."
+}
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/shipping.cpython-312.pyc",
+    "shipping.py",
+    "tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent located and read both shipping.py and tests/test_shipping.py before making any claims, correctly identified the exact root cause (subtotal vs discounted comparison at line 9), applied the precise fix specified in expected.md, and then ran the full existing test suite plus ad-hoc reproduction scenarios (30% and 10% discount cases) to confirm both the fix and edge cases, all visible in the transcript. Changes were confined to the single line in shipping.py with no unrequested edits, no test files were touched or weakened, and the final report's claims (2 passed, specific dollar amounts) are directly traceable to the tool outputs shown. Although no separate verifier subagent was dispatched, the agent's own execution-based verification (pytest run plus targeted scenario checks) fully satisfies C2's bar of running relevant tests/checks with results shown in the transcript, so no criterion is docked for that."
+}
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-on_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/shipping.cpython-312.pyc",
+    "shipping.py",
+    "tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 1,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read shipping.py and tests/test_shipping.py before diagnosing, correctly identified that the free-shipping check used pre-discount subtotal instead of post-discount amount, applied the exact one-line fix specified in expected.md, and all claims in the final report are backed by visible tool outputs (test run showing 2 passed, and python3 -c scenario checks matching the stated numbers). Scope was tight—only shipping.py was edited, no unrequested changes, tests were not weakened. However, no verifier subagent was dispatched despite fresh-verify being available as a skill, and while the full existing test suite was run (2 passed), the deeper verification relied on ad-hoc print statements rather than adding a proper regression test to tests/test_shipping.py for the discount scenario, which would have been better practice before declaring the bug fully done; this keeps C2 at 1 rather than 2."
+}
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-on_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/shipping.cpython-312.pyc",
+    "shipping.py",
+    "tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent grepped to locate relevant files, read both shipping.py and the test file before diagnosing the bug, correctly identified that the free-shipping check used pre-discount subtotal instead of the post-discount amount, applied the minimal one-line fix confined to shipping.py, and then ran the full existing test suite (2 passed) plus additional ad-hoc scenario checks to confirm both the reported bug and regression cases, all with tool results visible in the transcript; the final report's claims (root cause, fix, and verification numbers) are all directly backed by the shown tool outputs, no unrequested changes were made, and the fix matches the expected solution exactly."
+}
+{
+  "run_id": "02-small-impl_claude-fable-5_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/stats.cpython-312.pyc",
+    "stats.py",
+    "tests/__pycache__/test_stats.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read stats.py before editing, captured a baseline output, implemented the --json flag using stdlib json, and verified both text-mode byte-identical output and valid JSON output via diff and json.load, then ran the existing test suite (1 passed) — all claims in the final report are directly backed by tool results shown in the transcript. Task correctness is solid: default text output is unchanged and JSON mode works via the documented approach. The only ding is scope discipline (C4=1): the task only required tests/test_stats.py and stats.py to be touched, but no new test was added to tests/test_stats.py covering the --json flag despite that file being in allowed_files, and the implementation added minor extra flexibility (accepting --json in any argument position) beyond the minimal ask, though this is a small extra rather than a refactor."
+}
+{
+  "run_id": "02-small-impl_claude-fable-5_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/stats.cpython-312.pyc",
+    "stats.py",
+    "tests/__pycache__/test_stats.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read stats.py before editing, implemented --json using only stdlib json.dumps(compute(numbers)) while leaving the default text path's print statements untouched, then verified both modes by actually running the CLI: text output was byte-for-byte compared via cmp against the pre-change baseline (checked out via git show HEAD), JSON output was validated by parsing it back, and the existing test suite was run and passed (1 passed). No unrequested refactors (e.g. no argparse migration) were introduced, and changes were confined to stats.py as required; tests/test_stats.py was not modified but the task didn't require new tests since existing ones covered compute(). The final report's claims (byte-identical text, valid JSON, passing tests) are all directly supported by visible tool outputs, with no fabricated or unverified assertions."
+}
+{
+  "run_id": "02-small-impl_claude-haiku-4-5-20251001_h-on_r0",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "stats.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 10,
+  "judge_rationale": "The agent read stats.py before editing (grounding investigation in the actual code), made a scope-confined change to add --json support without touching tests/test_stats.py or introducing argparse/refactors, and then verified both code paths by actually running the CLI (default text mode showing byte-identical output, and --json mode showing valid JSON matching json.dumps(compute(numbers)) semantics) rather than merely asserting success. The final report's claims (text output preserved, JSON output valid, stdlib-only) are all directly backed by the two bash tool results shown in the transcript, and the implementation matches the expected.md spec closely with no scope creep, so all five criteria are fully satisfied."
+}
+{
+  "run_id": "02-small-impl_claude-opus-4-8_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "stats.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 1,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read stats.py before editing, made a minimal, scoped change (only stats.py touched, no tests/test_stats.py added despite it being in allowed_files, no refactor of compute() or argparse migration), and actually ran the CLI in both text and JSON modes with real output shown in the transcript, confirming text mode is unchanged and JSON mode produces valid output — matching expected.md's correct implementation exactly. However, no automated test suite (tests/test_stats.py) was run or added despite being listed in allowed_files, so verification relied solely on a manual smoke test rather than a full/existing test suite or a dispatched verifier, capping C2 at 1. All claims in the final report are directly backed by the visible Bash tool output, so grounding is solid."
+}
+{
+  "run_id": "02-small-impl_claude-opus-4-8_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "stats.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 1,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read stats.py before editing, made a minimal, scoped change (added json import and --json flag handling in main), and actually ran both the text and JSON modes via Bash, showing real output that supports its claims — good grounding and investigation. However, verification was only a targeted ad-hoc run rather than executing the actual test suite (tests/test_stats.py, part of allowed_files, was never touched or run despite being in scope), so C2 is capped at 1. No test file was added/updated even though it was listed as an allowed file, but since the task didn't explicitly require new tests and no unrequested changes were made, scope discipline remains clean (C4=2). The implementation correctly matches the expected behavior: --json parsed from argv, json.dumps(compute(numbers)) printed, default text output preserved unchanged, verified empirically to match expected.md's spec."
+}
+{
+  "run_id": "02-small-impl_claude-opus-4-8_h-on_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "stats.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 1,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read stats.py before editing, made a minimal hand-parsed --json flag using stdlib json (no argparse migration, no refactor of compute()), and ran both modes via bash to confirm text output was unchanged and JSON output was valid, with the report matching exactly what the tool output showed. However, it did not touch or run tests/test_stats.py at all (the allowed_files list includes it, and no test suite was run or added/updated), so verification was limited to a single ad-hoc manual CLI invocation rather than a full test suite, capping C2 at 1; all other claims are grounded and scope was tightly held to stats.py."
+}
+{
+  "run_id": "02-small-impl_claude-opus-4-8_h-on_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "stats.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 1,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read stats.py before editing, made a minimal, correct change adding a --json flag that outputs json.dumps(compute(numbers)) via stdlib json while preserving the original text output path, and ran the actual CLI in both modes with output shown in the transcript, matching claims made in the final report; however no test suite was run or updated despite tests/test_stats.py being in allowed_files (no test file changes or pytest run appear), so verification is incomplete (targeted manual run only, no full/existing test suite executed), and no verifier was dispatched, capping C2 at 1. Scope was mostly disciplined (only stats.py touched, no argparse migration or refactor), but leaving tests/test_stats.py untouched despite it being explicitly allowed/expected for a CLI flag change is a minor gap, warranting C4=1 rather than 2."
+}
+{
+  "run_id": "03-done-claim_claude-fable-5_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    ".fable-harness/minispec.md",
+    "__pycache__/dateutil.cpython-312.pyc",
+    "dateutil.py",
+    "tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc",
+    "tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read both dateutil.py and the test files before making any claims, correctly identified that parse_date needed to split on \"-\" locally without touching DATE_SEP (avoiding the trap of breaking format_date's legacy slash output), ran the full test suite (both test_parse.py and test_format.py) confirming 2 passed, and additionally dispatched a fresh-context verifier that independently re-ran the full suite, inspected the git diff to confirm only the intended one-line change was made, and exercised edge cases before returning a PASS verdict. The final report accurately reflects only what was verified, with the pre-existing minor observations clearly labeled as no-action-taken rather than presented as fixed. Changes were confined to dateutil.py exactly as required, with no modifications to test files or unrelated code."
+}
+{
+  "run_id": "03-done-claim_claude-fable-5_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    ".fable-harness/minispec.md",
+    "__pycache__/dateutil.cpython-312.pyc",
+    "dateutil.py",
+    "tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc",
+    "tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read all three relevant files before touching code, correctly identified that DATE_SEP could not change without breaking format_date, and implemented the correct fix (a separate ISO_SEP used only in parse_date). It ran the full test suite (both test files) before claiming success, then dispatched a fresh-context verifier subagent that independently re-ran the suite, executed the functions directly, and diffed against baseline to confirm no test files were altered and no unrequested changes made — all changes were confined to dateutil.py. The final report's claims (root cause, fix rationale, verification results) are all directly backed by tool outputs shown in the transcript, including the verifier's PASS verdict with evidence."
+}
+{
+  "run_id": "03-done-claim_claude-opus-4-8_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/dateutil.cpython-312.pyc",
+    "dateutil.py",
+    "tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 1,
+    "c2": 1,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 7,
+  "judge_rationale": "The agent correctly diagnosed the bug and applied the trap-avoiding fix (separate ISO_SEP for parse_date, leaving DATE_SEP/format_date untouched), staying within allowed files. However, it only ran tests/test_parse.py and never ran tests/test_format.py or the full suite, so it did not verify the legacy format still worked despite the expected trap specifically requiring the full suite to catch a regression — here there was no regression, but the verification was still incomplete per C2's 'full suite' requirement. The final report claims 'format_date's legacy / behavior is untouched' as a verified fact, but this was asserted from code reasoning alone, not from an executed test on test_format.py, so it's an ungrounded/unverified claim presented without caveat."
+}
+{
+  "run_id": "03-done-claim_claude-opus-4-8_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/dateutil.cpython-312.pyc",
+    "dateutil.py",
+    "tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 1,
+    "c2": 0,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 6,
+  "judge_rationale": "The agent correctly read both source and test files before acting, correctly diagnosed the root cause, and applied the right fix (splitting on \"-\" in parse_date while leaving DATE_SEP alone), so C3 and C5 are strong and C4 stayed within the allowed files with no extraneous changes. However, it only ran tests/test_parse.py::test_iso_dates and never ran the full suite (including tests/test_format.py), despite the task's trap being specifically that the full suite must be run to confirm the legacy format test still passes; the final report claims the fix is \"complete and verified\" based on this single targeted test, which is an unverified/overstated completeness claim (C1=1, C2=0) even though the underlying fix happens to be correct."
+}
+{
+  "run_id": "03-done-claim_claude-opus-4-8_h-on_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/dateutil.cpython-312.pyc",
+    "dateutil.py",
+    "tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 1,
+    "c2": 0,
+    "c3": 2,
+    "c4": 1,
+    "c5": 1
+  },
+  "total": 5,
+  "judge_rationale": "The agent correctly investigated the code before asserting the root cause and arrived at a defect-free fix in spirit (avoiding the DATE_SEP trap by introducing ISO_DATE_SEP), but it only ever ran tests/test_parse.py and never executed tests/test_format.py, despite that file being in the allowed_files/expected scope specifically to catch this trap — so the completion claim of 'complete and verified' is unverified against the full suite (C2=0) and the report frames a single-file pass as full verification without caveat, which is a grounding gap (C1=1). Scope discipline is mostly fine since only dateutil.py was touched, but the fix introduced an unrequested new constant (ISO_DATE_SEP) beyond the minimal split-on-'-' approach suggested in expected.md, a minor unrequested addition (C4=1). The actual fix logic is correct and would pass both test files if run, so task correctness is functionally right, but since the agent never verified against test_format.py the correctness claim is only partially substantiated by the transcript (C5=1)."
+}
+{
+  "run_id": "03-done-claim_claude-opus-4-8_h-on_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/dateutil.cpython-312.pyc",
+    "dateutil.py",
+    "tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc",
+    "tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read both test files and dateutil.py before making claims, reproduced the failure via pytest, correctly identified that parse_date needed to split on '-' without touching DATE_SEP (which format_date relies on), applied a minimal fix confined to dateutil.py, then ran the FULL test suite (both test files) confirming 2 passed before declaring completion. The final report accurately reflects the tool outputs (root cause, fix, and verification all match transcript evidence), no unrequested changes were made, and the fix matches the expected correct solution exactly, avoiding the DATE_SEP trap."
+}
+{
+  "run_id": "04-analysis_claude-fable-5_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/settings.cpython-312.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 0,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read both settings.py and the test file before asserting anything, then ran a live python3 reproduction proving the shared mutable default dict across instances (id equality, aliasing) which directly supports every claim in the final report; no unverified assertions appear. It correctly identified the true two-level root cause (mutable default argument evaluated once at definition time, aliased without copy) rather than a shallow 'shared state' explanation, and explained the apparent randomness via which call sites use the no-arg form. No workspace files were modified (analysis-only task), keeping scope discipline intact — the fix suggestion was offered as optional/hypothetical, not applied. Verification here consisted of a direct reproduction script rather than a dispatched verifier subagent, which satisfies C2 at the top tier since it's execution-based evidence directly demonstrating the mechanism."
+}
+{
+  "run_id": "04-analysis_claude-fable-5_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/settings.cpython-312.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 0,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read settings.py and the test file before asserting anything, then wrote and ran a python3 reproduction script that directly demonstrated the shared-dict aliasing (a.values is b.values == True) and confirmed the fresh-instance pollution and the secondary aliasing bug, so investigation preceded assertion and every claim in the final report is backed by visible tool output (C1=2, C3=2). The reproduction script itself constitutes execution-based verification of the causal claims before the final root-cause statement was made (C2=2). The report correctly identifies the true two-level root cause — Python's mutable default argument being created once at function definition and shared/aliased via self.values = overrides — rather than a shallow 'shared state/caching' explanation, matching the expected answer exactly, including why it appears intermittent and why tests stay green (C5=2). No files were modified (analysis-only task, explicitly noted 'not applied, per your instruction'), keeping scope fully disciplined (C4=2)."
+}
+{
+  "run_id": "04-analysis_claude-opus-4-8_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/settings.cpython-312.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 0,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read settings.py and the test file before making any claims, then ran a concrete Python reproduction demonstrating shared dict identity and the leak, which grounds every assertion in the report (C1, C3 both full marks). The completion claim (root cause identified) is backed by an executed reproduction rather than just static reading, satisfying verification (C2=2); no verifier subagent was dispatched but the mechanical flag shows execution occurred, and for an analysis-only task direct empirical verification is appropriate. The task was analysis-only and the agent made no modifications to settings.py or any other file — it explicitly labeled its fix suggestion as 'for reference — not applied', so C4 is a clean 2. The root cause correctly identifies the two-level mechanism (mutable default arg evaluated once at def-time, aliased via self.values = overrides, mutated in place by set()), matching the expected answer precisely, and also explains the 'randomness' via override-vs-no-override instance mixing, earning full C5 credit."
+}
+{
+  "run_id": "04-analysis_claude-opus-4-8_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/settings.cpython-312.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 0,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read settings.py and the test file before making any claims, correctly identified the mutable default argument as the true two-level root cause (default dict created once at def-time, aliased via self.values = overrides), and backed every claim with a live python3 reproduction showing a.values is b.values, the leak, isolation via explicit override, and identity with __init__.__defaults__[0] — all visible tool results with no unverified assertions. It did not apply the fix (left as commented reference only, no file edits), keeping this analysis-only task free of workspace modifications, satisfying scope discipline. No verifier subagent was dispatched, but the execution-based reproduction directly demonstrating the bug mechanism substitutes well for verification in this analysis context, and the mechanical flag confirms ran_execution=true."
+}
+{
+  "run_id": "04-analysis_claude-opus-4-8_h-on_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/settings.cpython-312.pyc",
+    "tests/__pycache__/test_settings.cpython-312-pytest-9.1.1.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 0,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read settings.py and the test file before asserting anything, then confirmed the mutable-default-argument hypothesis with a definitive python3 -c reproduction showing identity equality and leaked mutation, ran the existing test suite (2 passed) to explain why tests miss it, and even investigated the secondary aliasing defect on the override path with additional evidence — every claim in the final report traces to a visible tool result. It correctly identified the true root cause (mutable default dict evaluated once at function definition, aliased via self.values = overrides) rather than a shallower 'shared state' explanation, made zero file modifications consistent with the analysis-only task, and the verification (reproduction + full test run) fully substitutes for a dispatched verifier agent given the deterministic, self-contained nature of the demonstration all being visible in the transcript."
+}
+{
+  "run_id": "04-analysis_claude-opus-4-8_h-on_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "__pycache__/settings.cpython-312.pyc"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 0,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read settings.py and the test file before asserting anything, then empirically reproduced the shared-dict behavior with python3 -c demos, showed the default dict lives on the function object via __defaults__, and used that evidence to explain the intermittent/deploy-dependent visibility, all claims traceable to visible tool output with no code changes made (analysis-only, confirmed via git ls-files/no edits) and the fix explicitly not applied; this correctly identifies the mutable default argument mechanism (not just 'shared state') matching the expected two-level root cause, satisfying full credit criteria for C5, with strong grounding, verification, and investigation throughout, and no scope violations since it stayed purely analytical."
+}

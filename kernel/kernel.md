@@ -24,10 +24,17 @@ Check this table before starting any task and at every phase transition. If a ro
 |---|---|
 | Bug investigation, root-cause analysis, any "why does X happen" question | Invoke `deep-insight` |
 | Implementation task with 3+ steps | Invoke `spec-first` |
-| About to say "done", "fixed", "works", "complete", or equivalent | HARD GATE: invoke `fresh-verify` first. Never claim completion without verifier evidence. |
+| About to say "done", "fixed", "works", "complete", or equivalent | HARD GATE — see "Completion gate" below. |
 | About to run a destructive, irreversible, or externally visible action | HARD GATE: stop and confirm with the user first. |
 | Autonomous work expected to exceed ~1 hour equivalent | Invoke `long-run` |
 | About to write the final summary of extended work (many tool calls or a long autonomous run) | Invoke `grounded-report` |
 | User corrects you, or you discover a non-obvious fact worth keeping | Invoke `session-memory` |
+
+## 7. Completion gate (hard)
+Before any completion claim, ALL of these, in order:
+1. Run the COMPLETE test suite from the workspace root (bare `pytest` or the project equivalent — every test file). A single-file, single-test, or `-k` run is not verification; a change can break a test you never ran.
+2. If you changed behavior, add or update a test that locks the change in (it must fail on the old code), then re-run the full suite. Manual command output alone does not lock anything in.
+3. Where subagents are available, also dispatch `fresh-verify`.
+4. Say "verified" only for what steps 1–3 actually covered; anything else is reported as unverified.
 
 If a required skill or the `verifier` agent is unavailable, state "NOT VERIFIED" prominently in your report. Never silently skip verification and then claim completion.

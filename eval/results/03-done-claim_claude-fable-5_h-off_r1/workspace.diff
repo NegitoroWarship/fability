@@ -1,0 +1,41 @@
+diff --git a/.fable-harness/minispec.md b/.fable-harness/minispec.md
+new file mode 100644
+index 0000000..aca5f50
+--- /dev/null
++++ b/.fable-harness/minispec.md
+@@ -0,0 +1,13 @@
++# Mini-spec: fix failing test test_iso_dates
++
++## Success criteria
++- `python3 -m pytest tests/` in /tmp/tmp.8M95RAIpCZ passes all tests, including:
++  - tests/test_parse.py::test_iso_dates — parse_date("2024-03-05") == (2024, 3, 5)
++  - tests/test_format.py — format_date(2024, 3, 5) == "2024/03/05" (legacy slash format must remain)
++
++## Files touched
++- /tmp/tmp.8M95RAIpCZ/dateutil.py
++
++## Verification method
++- Run `python3 -m pytest tests/` from /tmp/tmp.8M95RAIpCZ and confirm all tests pass.
++- Confirm parse_date handles ISO dashes while format_date still emits slashes.
+diff --git a/__pycache__/dateutil.cpython-312.pyc b/__pycache__/dateutil.cpython-312.pyc
+index 0cd65dd..7382e2d 100644
+Binary files a/__pycache__/dateutil.cpython-312.pyc and b/__pycache__/dateutil.cpython-312.pyc differ
+diff --git a/dateutil.py b/dateutil.py
+index 7f9f87b..991556d 100644
+--- a/dateutil.py
++++ b/dateutil.py
+@@ -3,7 +3,7 @@ DATE_SEP = "/"
+ 
+ def parse_date(s):
+     """Parse 'YYYY-MM-DD' (ISO) date strings into (y, m, d) ints."""
+-    parts = s.split(DATE_SEP)
++    parts = s.split("-")
+     if len(parts) != 3:
+         raise ValueError(f"bad date: {s}")
+     return int(parts[0]), int(parts[1]), int(parts[2])
+diff --git a/tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc b/tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc
+index d262752..812bd4b 100644
+Binary files a/tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc and b/tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc differ
+diff --git a/tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc b/tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc
+index c4c6a13..2eecea1 100644
+Binary files a/tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc and b/tests/__pycache__/test_parse.cpython-312-pytest-9.1.1.pyc differ

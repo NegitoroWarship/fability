@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Run one eval condition: ./run.sh <task-dir> <model-id> <on|off> [rep]
+# Run one eval condition: ./run.sh <task-dir> <model-id> <off|on|on2> [rep]
+# on  = harness v1: kernel via SessionStart hook (additionalContext)
+# on2 = harness v2: kernel via --append-system-prompt + stop-verify Stop hook
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -24,13 +26,27 @@ __pycache__/
 .claude/
 GITIGNORE
 
-if [ "$HARNESS" = "on" ]; then
-  mkdir -p "$WORK/.claude"
-  cp -r "$ROOT/skills" "$WORK/.claude/skills"
-  mkdir -p "$WORK/.claude/agents"
-  cp "$ROOT"/agents/*.md "$WORK/.claude/agents/"
-  printf '{"hooks":{"SessionStart":[{"hooks":[{"type":"command","command":"%s/hooks/session-start.sh"}]}]}}\n' \
-    "$ROOT" > "$WORK/.claude/settings.json"
+case "$HARNESS" in
+  off) ;;
+  on|on2)
+    mkdir -p "$WORK/.claude"
+    cp -r "$ROOT/skills" "$WORK/.claude/skills"
+    mkdir -p "$WORK/.claude/agents"
+    cp "$ROOT"/agents/*.md "$WORK/.claude/agents/"
+    if [ "$HARNESS" = "on" ]; then
+      printf '{"hooks":{"SessionStart":[{"hooks":[{"type":"command","command":"%s/hooks/session-start.sh"}]}]}}\n' \
+        "$ROOT" > "$WORK/.claude/settings.json"
+    else
+      printf '{"hooks":{"Stop":[{"hooks":[{"type":"command","command":"%s/hooks/stop-verify.sh"}]}]}}\n' \
+        "$ROOT" > "$WORK/.claude/settings.json"
+    fi
+    ;;
+  *) echo "harness must be off|on|on2, got: $HARNESS" >&2; exit 1 ;;
+esac
+
+EXTRA_ARGS=()
+if [ "$HARNESS" = "on2" ]; then
+  EXTRA_ARGS+=(--append-system-prompt "$(cat "$ROOT/kernel/kernel.md")")
 fi
 
 git -C "$WORK" init -q
@@ -44,7 +60,7 @@ set +e
     --model "$MODEL" \
     --output-format stream-json --verbose \
     --dangerously-skip-permissions \
-    --max-turns 80) > "$OUT_DIR/transcript.jsonl" 2> "$OUT_DIR/stderr.log"
+    --max-turns 80 "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}") > "$OUT_DIR/transcript.jsonl" 2> "$OUT_DIR/stderr.log"
 STATUS=$?
 set -e
 echo "$STATUS" > "$OUT_DIR/exit_code.txt"

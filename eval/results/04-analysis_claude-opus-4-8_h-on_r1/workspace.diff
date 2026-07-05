@@ -1,0 +1,6 @@
+diff --git a/__pycache__/settings.cpython-312.pyc b/__pycache__/settings.cpython-312.pyc
+index c2b5d66..4fe8eb5 100644
+Binary files a/__pycache__/settings.cpython-312.pyc and b/__pycache__/settings.cpython-312.pyc differ
+diff --git a/tests/__pycache__/test_settings.cpython-312-pytest-9.1.1.pyc b/tests/__pycache__/test_settings.cpython-312-pytest-9.1.1.pyc
+index 35a08fd..1f076ce 100644
+Binary files a/tests/__pycache__/test_settings.cpython-312-pytest-9.1.1.pyc and b/tests/__pycache__/test_settings.cpython-312-pytest-9.1.1.pyc differ

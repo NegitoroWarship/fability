@@ -1,0 +1,17 @@
+diff --git a/__pycache__/shipping.cpython-312.pyc b/__pycache__/shipping.cpython-312.pyc
+index 003d1b7..c18e4a9 100644
+Binary files a/__pycache__/shipping.cpython-312.pyc and b/__pycache__/shipping.cpython-312.pyc differ
+diff --git a/shipping.py b/shipping.py
+index 0531fd1..4d62daf 100644
+--- a/shipping.py
++++ b/shipping.py
+@@ -6,5 +6,5 @@ def order_total(items, discount_rate=0.0):
+     """items: list of (price, qty). Returns amount charged including shipping."""
+     subtotal = sum(price * qty for price, qty in items)
+     discounted = subtotal * (1 - discount_rate)
+-    shipping = 0.0 if subtotal >= FREE_SHIPPING_THRESHOLD else SHIPPING_FLAT
++    shipping = 0.0 if discounted >= FREE_SHIPPING_THRESHOLD else SHIPPING_FLAT
+     return round(discounted + shipping, 2)
+diff --git a/tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc b/tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc
+index a0b26f0..6288c3d 100644
+Binary files a/tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc and b/tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc differ

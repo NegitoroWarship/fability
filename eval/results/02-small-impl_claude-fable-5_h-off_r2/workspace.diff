@@ -1,0 +1,41 @@
+diff --git a/__pycache__/stats.cpython-312.pyc b/__pycache__/stats.cpython-312.pyc
+index 010c723..7b19452 100644
+Binary files a/__pycache__/stats.cpython-312.pyc and b/__pycache__/stats.cpython-312.pyc differ
+diff --git a/stats.py b/stats.py
+index aac6e5b..1fd1567 100644
+--- a/stats.py
++++ b/stats.py
+@@ -1,3 +1,4 @@
++import json
+ import sys
+ 
+ 
+@@ -11,13 +12,20 @@ def compute(numbers):
+ 
+ 
+ def main():
+-    path = sys.argv[1]
++    args = sys.argv[1:]
++    as_json = "--json" in args
++    if as_json:
++        args = [a for a in args if a != "--json"]
++    path = args[0]
+     numbers = [float(line) for line in open(path) if line.strip()]
+     s = compute(numbers)
+-    print(f"count: {s['count']}")
+-    print(f"mean: {s['mean']:.2f}")
+-    print(f"min: {s['min']}")
+-    print(f"max: {s['max']}")
++    if as_json:
++        print(json.dumps(s))
++    else:
++        print(f"count: {s['count']}")
++        print(f"mean: {s['mean']:.2f}")
++        print(f"min: {s['min']}")
++        print(f"max: {s['max']}")
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/tests/__pycache__/test_stats.cpython-312-pytest-9.1.1.pyc b/tests/__pycache__/test_stats.cpython-312-pytest-9.1.1.pyc
+index d8e8143..eafa894 100644
+Binary files a/tests/__pycache__/test_stats.cpython-312-pytest-9.1.1.pyc and b/tests/__pycache__/test_stats.cpython-312-pytest-9.1.1.pyc differ

@@ -1,0 +1,50 @@
+diff --git a/data.txt b/data.txt
+index 16b77ea..8bad034 100644
+--- a/data.txt
++++ b/data.txt
+@@ -1,4 +1,5 @@
+-10
+-20
+-30
+-40
++1.5
++2.5
++3.5
++4.5
++5.5
+diff --git a/stats.py b/stats.py
+index aac6e5b..fa41a0d 100644
+--- a/stats.py
++++ b/stats.py
+@@ -1,4 +1,5 @@
+ import sys
++import json
+ 
+ 
+ def compute(numbers):
+@@ -11,13 +12,21 @@ def compute(numbers):
+ 
+ 
+ def main():
++    use_json = "--json" in sys.argv
++    if use_json:
++        sys.argv.remove("--json")
++
+     path = sys.argv[1]
+     numbers = [float(line) for line in open(path) if line.strip()]
+     s = compute(numbers)
+-    print(f"count: {s['count']}")
+-    print(f"mean: {s['mean']:.2f}")
+-    print(f"min: {s['min']}")
+-    print(f"max: {s['max']}")
++
++    if use_json:
++        print(json.dumps(s))
++    else:
++        print(f"count: {s['count']}")
++        print(f"mean: {s['mean']:.2f}")
++        print(f"min: {s['min']}")
++        print(f"max: {s['max']}")
+ 
+ 
+ if __name__ == "__main__":

@@ -1,0 +1,35 @@
+diff --git a/__pycache__/shipping.cpython-312.pyc b/__pycache__/shipping.cpython-312.pyc
+index 003d1b7..ce61222 100644
+Binary files a/__pycache__/shipping.cpython-312.pyc and b/__pycache__/shipping.cpython-312.pyc differ
+diff --git a/shipping.py b/shipping.py
+index 0531fd1..4d62daf 100644
+--- a/shipping.py
++++ b/shipping.py
+@@ -6,5 +6,5 @@ def order_total(items, discount_rate=0.0):
+     """items: list of (price, qty). Returns amount charged including shipping."""
+     subtotal = sum(price * qty for price, qty in items)
+     discounted = subtotal * (1 - discount_rate)
+-    shipping = 0.0 if subtotal >= FREE_SHIPPING_THRESHOLD else SHIPPING_FLAT
++    shipping = 0.0 if discounted >= FREE_SHIPPING_THRESHOLD else SHIPPING_FLAT
+     return round(discounted + shipping, 2)
+diff --git a/tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc b/tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc
+index a0b26f0..9986038 100644
+Binary files a/tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc and b/tests/__pycache__/test_shipping.cpython-312-pytest-9.1.1.pyc differ
+diff --git a/tests/test_shipping.py b/tests/test_shipping.py
+index b557cd4..09f48d9 100644
+--- a/tests/test_shipping.py
++++ b/tests/test_shipping.py
+@@ -7,3 +7,13 @@ def test_no_discount_under_threshold():
+ 
+ def test_no_discount_over_threshold():
+     assert order_total([(30.00, 2)]) == 60.00
++
++
++def test_discount_drops_paid_amount_under_threshold():
++    # $60 subtotal, 30% off -> pays $42, so shipping applies
++    assert order_total([(30.00, 2)], discount_rate=0.30) == 46.99
++
++
++def test_discounted_amount_at_threshold_gets_free_shipping():
++    # $100 subtotal, 50% off -> pays exactly $50, free shipping
++    assert order_total([(50.00, 2)], discount_rate=0.50) == 50.00
