@@ -647,6 +647,13 @@ WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 cp -r "$TASK_DIR/workspace/." "$WORK/"
 
+cat > "$WORK/.gitignore" <<'GITIGNORE'
+__pycache__/
+*.pyc
+.fable-harness/
+.claude/
+GITIGNORE
+
 if [ "$HARNESS" = "on" ]; then
   mkdir -p "$WORK/.claude"
   cp -r "$ROOT/skills" "$WORK/.claude/skills"
