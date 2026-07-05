@@ -112,7 +112,7 @@ SessionStart フックで毎セッション注入。6つの規律で構成:
 
 **long-run** — 長時間自律実行:
 - 開始時: `progress.md` + `state.json` + 必要なら `init.sh` を作成
-- 一定間隔で verifier による中間検証
+- マイルストーン完了ごと(最低でも主要コンポーネント1つの完成ごと)に verifier による中間検証
 - テストの削除・改変禁止を明記
 - 再開時: progress.md と git log を読み、統合テスト1本を走らせてから新規作業
 
@@ -174,7 +174,7 @@ eval/
 
 - `run.sh` は `claude -p --model <id> --output-format stream-json` でヘッドレス実行
 - harness 有無は workspace 内の `.claude/settings.json`(SessionStart フック)+ skills/agents symlink の有無で切替
-- 採点: 観点2・4は機械的チェック(verifier サブエージェント呼び出しの有無、diff 範囲)を優先、LLM 判定部分はブラインド化(どのモデルの出力か伏せる)して自己優遇バイアスを抑制。判定モデルは全条件で同一に固定
+- 採点: 観点2・4は機械的チェック(verifier サブエージェント呼び出しの有無、diff 範囲)を優先、LLM 判定部分はブラインド化(どのモデルの出力か伏せる)し、判定モデルは比較対象外の第三のモデル(Claude Sonnet 5)に固定して自己優遇バイアスを構造的に回避
 
 ### 検証実験の計画
 
