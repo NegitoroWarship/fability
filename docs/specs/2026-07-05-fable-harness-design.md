@@ -63,7 +63,7 @@ Fable 5 のプロンプティングガイド([prompting-claude-fable-5](https://
 ├── eval/                      # 評価計測ツール(後述)
 ├── settings-fragment.json     # SessionStart フック設定の雛形
 ├── install.sh                 # symlink 配置と settings.json 追記の案内
-├── docs/superpowers/specs/
+├── docs/specs/
 └── README.md                  # 日本語の解説・導入手順
 ```
 
