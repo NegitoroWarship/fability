@@ -1,0 +1,19 @@
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-on_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 10,
+  "judge_rationale": "The agent grepped for relevant files, read shipping.py and the test file before asserting the root cause, correctly identified that the free-shipping check used pre-discount subtotal instead of the post-discount amount, applied a minimal one-line fix confined to shipping.py (no test file changes, matching allowed_files), and verified by running the existing test suite (2 passed) plus explicit scenario checks demonstrating the bug scenario is now fixed and regression cases still work — all claims in the final report are backed by visible tool output with no fabrication or unverified assertions."
+}

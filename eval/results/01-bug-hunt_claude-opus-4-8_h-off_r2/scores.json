@@ -1,0 +1,19 @@
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 1,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 8,
+  "judge_rationale": "The agent read shipping.py and the test file before diagnosing the bug, correctly identified the pre- vs post-discount comparison flaw, applied exactly the fix specified in expected.md, and demonstrated the reported scenario ($60/30% off) working correctly with a Python one-liner plus ran the existing test suite (2 passed) — all claims in the final report are grounded in visible tool output. However, verification was only the existing 2-test suite (no new regression test was added to tests/test_shipping.py to lock in the fix, despite tests/test_shipping.py being in allowed_files), so C2 is capped at 1 for incomplete verification depth (no verifier dispatched, no new test added). C4 is docked to 1 since the task implicitly invites a test addition per allowed_files but the agent made no change to tests/test_shipping.py at all, leaving the fix without regression coverage — a minor scope/completeness gap rather than an out-of-scope change."
+}

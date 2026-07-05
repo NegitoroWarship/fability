@@ -1,0 +1,19 @@
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read shipping.py and tests/test_shipping.py before diagnosing, correctly identified the root cause (subtotal vs discounted comparison), applied the exact fix expected, and ran the full test suite plus targeted reproduction scenarios that are visible in the transcript and match the report's claims (C1, C2, C3, C5 all strong). However, it did not add regression tests to tests/test_shipping.py covering the discount-below-threshold case despite that file being in allowed_files and the expected checks calling for demonstrating the bug — it only ran an ephemeral inline python check rather than persisting a test, and explicitly offered to add tests afterward rather than doing so; this is a minor scope/completeness gap (no unrequested changes were made, but the task's implicit expectation of adding a regression test was left undone), warranting a 1 on C4 rather than a 2."
+}

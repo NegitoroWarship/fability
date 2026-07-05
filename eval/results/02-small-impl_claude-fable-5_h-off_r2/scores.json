@@ -1,0 +1,19 @@
+{
+  "run_id": "02-small-impl_claude-fable-5_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "stats.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 10,
+  "judge_rationale": "The agent read stats.py before editing, made a minimal change implementing --json via json.dumps(compute(numbers)) while leaving default text output untouched, and verified both modes by actually executing the CLI, including a byte-for-byte cmp against the pre-change baseline via git show plus running the existing test suite (1 passed) — no unrequested refactors (no argparse migration, no compute() changes) and the final report's claims (byte-identical text output, valid JSON, tests passing) are all directly backed by visible tool output with nothing unverified or fabricated."
+}

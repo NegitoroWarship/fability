@@ -1,0 +1,20 @@
+{
+  "run_id": "01-bug-hunt_claude-fable-5_h-off_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "shipping.py",
+    "tests/test_shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 10,
+  "judge_rationale": "The agent read shipping.py and the test file before making any claims, correctly identified that the free-shipping check used pre-discount subtotal instead of discounted amount, applied the exact fix specified in expected.md, added regression tests demonstrating the bug scenario (and a boundary case) without deleting or weakening existing tests, ran the full test suite via pytest and showed all 4 tests passing, and confined changes to shipping.py and tests/test_shipping.py exactly as allowed. The final report's claims about root cause and fix are all backed by visible tool results (Read outputs, Edit diffs, pytest output), with no unverified assertions."
+}

@@ -1,0 +1,19 @@
+{
+  "run_id": "02-small-impl_claude-fable-5_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "stats.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 10,
+  "judge_rationale": "The agent read stats.py before making changes, captured a baseline of text output, implemented the --json flag using stdlib json exactly as specified without argparse migration or refactoring, then verified both text mode (byte-identical diff) and JSON mode (parsed validity) via actual execution, and additionally ran the existing test suite to confirm no regressions. Changes were confined to stats.py only (tests/test_stats.py was not touched, which is fine since no new test was required), and the final report's claims all map directly to visible tool outputs (diff, JSON print, json.load parse, pytest pass) with no unsupported assertions."
+}

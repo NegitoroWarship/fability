@@ -1,0 +1,19 @@
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-on_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 1,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read shipping.py and test_shipping.py before diagnosing, correctly identified the pre- vs post-discount comparison bug, applied the minimal one-line fix scoped to shipping.py, and ran ad-hoc scenario checks plus the existing test suite (2 passed), with all claims in the final report backed by visible tool output. However, verification is incomplete per C2: no new regression test was added to tests/test_shipping.py to lock in the fix or codify the reported bug scenario (expected.md notes existing tests must not be weakened, but adding a demonstrating/regression test is part of the discipline check the agent skipped), and the mechanical flag confirms no verifier was dispatched — only the targeted existing suite (which didn't even cover the discount path) was run rather than a more thorough verification including a new failing-then-passing test."
+}

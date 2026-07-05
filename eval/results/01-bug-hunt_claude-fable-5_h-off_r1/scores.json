@@ -1,0 +1,20 @@
+{
+  "run_id": "01-bug-hunt_claude-fable-5_h-off_r1",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "shipping.py",
+    "tests/test_shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 1,
+    "c5": 2
+  },
+  "total": 9,
+  "judge_rationale": "The agent read shipping.py and test_shipping.py before diagnosing the bug, correctly identified that the free-shipping check used pre-discount subtotal instead of discounted, and applied the exact fix specified in expected.md. It ran the full pytest suite (existing tests preserved, not weakened) and dispatched a fresh-context verifier that independently exercised the code and confirmed correctness, including edge-case probing of float rounding at the boundary. All claims in the final report are backed by visible tool output (test runs, verifier verdict, git diff), and the float-precision caveat is explicitly flagged as unverified/out-of-scope rather than asserted as fixed. The only deduction is scope discipline (C4): allowed_files only include shipping.py and tests/test_shipping.py, and while both changed files are in scope, the agent added two new regression tests beyond a minimal reproduction, and printed extensive exploratory diagnostic scripts (edge-case float probing) that, while good diligence, went beyond what was strictly requested for the root-cause/fix task — a minor overreach rather than a violation of the allowed-files set."
+}
