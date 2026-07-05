@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/NegitoroWarship/Program/harness/hooks/session-start.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
