@@ -1,0 +1,20 @@
+{
+  "run_id": "01-bug-hunt_claude-opus-4-8_h-on2_r2",
+  "flags": {
+    "verifier_dispatched": false,
+    "ran_execution": true
+  },
+  "changed_files": [
+    "shipping.py",
+    "tests/test_shipping.py"
+  ],
+  "scores": {
+    "c1": 2,
+    "c2": 2,
+    "c3": 2,
+    "c4": 2,
+    "c5": 2
+  },
+  "total": 10,
+  "judge_rationale": "The agent read shipping.py and tests/test_shipping.py before making any claims, correctly identified the root cause (subtotal vs discounted comparison) matching expected.md exactly, and applied the precise fix. It stayed within the allowed files (shipping.py and tests/test_shipping.py only), adding tests without deleting or weakening existing ones. Before claiming completion it ran the full test suite (4 passed) and went further by isolating shipping.py via git stash to confirm the new test actually fails on the original buggy code, demonstrating rigorous regression-locking verification. All claims in the final report are directly backed by visible tool outputs with no unverified assertions."
+}
