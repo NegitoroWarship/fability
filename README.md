@@ -1,61 +1,59 @@
 # fable-harness
 
-Claude Opus 4.8 上で Claude Fable 5 級の厳密さ・正確性・洞察を引き出す Claude Code 用 harness。
-
 A Claude Code harness that closes the discipline gap between Claude Opus 4.8 and Claude Fable 5 — by mechanism, not by prompt.
 
-## 結果
+日本語版: [README.ja.md](README.ja.md)
 
-規律ベンチマーク(4タスク × 5観点rubric × 各条件8実行、Sonnet 5ブラインド判定):
+## Results
 
-| 条件 | 平均総合 (/10) | sd |
+Discipline benchmark: 4 tasks × 5-criterion rubric × 8 runs per condition, scored by a blind Sonnet 5 judge plus mechanical checks.
+
+| Condition | Mean total (/10) | sd |
 |---|---|---|
-| Fable 5(素) | 9.88 | 0.35 |
-| Opus 4.8(素) | 8.62 | 1.30 |
-| Opus 4.8 + harness v1(プロンプト注入のみ) | 8.88 | 1.46 |
+| Fable 5 (bare) | 9.88 | 0.35 |
+| Opus 4.8 (bare) | 8.62 | 1.30 |
+| Opus 4.8 + harness v1 (prompt injection only) | 8.88 | 1.46 |
 | **Opus 4.8 + harness v2** | **9.88** | **0.35** |
 
-Opus 4.8 + harness v2 は、本ベンチマークにおいて Fable 5 素と同スコア(5観点の平均値まで一致)。詳細な集計・グラフは [`eval/results/summary.md`](eval/results/summary.md) と `eval/results/report.html`(要ブラウザ)を参照。
+On this benchmark, Opus 4.8 + harness v2 scores identical to bare Fable 5 — down to the per-criterion means. Full aggregation and charts: [`eval/results/summary.md`](eval/results/summary.md) (Japanese) and `eval/results/report.html` (open in a browser).
 
-v1→v2 の差分が本プロジェクトの中心的知見: **規律は指示ではなく機構として与える。**
-- v1(カーネルを additionalContext として注入)は検証ハードゲートがほぼ発火せず、素の Opus 4.8 とほぼ同スコア
-- v2 は (a) カーネルを system prompt に注入し、(b) Stop フックが「フルテストスイート実行の証拠がない完了宣言」を機構的に差し戻す。これで検証実施(C2)が 1.25→2.00 に到達
+The v1→v2 delta is the project's central finding: **discipline must be delivered as mechanism, not instruction.**
 
-## 原理
+- v1 injected the kernel as session context (SessionStart hook). The verification hard gate almost never fired; scores stayed near bare Opus 4.8.
+- v2 (a) injects the kernel into the system prompt, and (b) adds a Stop hook that mechanically bounces any completion claim lacking evidence of a full-test-suite run. Verification discipline (C2) went from 1.25 to 2.00.
 
-Fable 5 のプロンプティングガイドは「Fable 5 が自然に行う挙動」のカタログである。
-Opus 4.8 は指示を字義通り忠実に実行する。よって Fable 5 の行動カタログを明示的な
-プロトコルに変換し、Opus 4.8 の指示追従——それで足りない箇所はフックによる強制——を
-配達機構として使う。
+## Principle
 
-## 構成
+Fable 5's prompting guide is effectively a catalog of behaviors Fable 5 exhibits naturally. Opus 4.8 follows instructions literally and faithfully. So: convert the Fable 5 behavior catalog into explicit protocols, and use Opus 4.8's instruction-following — backed by hook-level enforcement where instruction alone fails — as the delivery mechanism.
 
-- `kernel/kernel.md` — 常時規律6種+スキルディスパッチ表+完了ゲート(v2: system prompt 注入)
-- `hooks/stop-verify.sh` — Stop フック。フルスイート実行の証拠なしの完了を差し戻す(v2 の核)
-- `hooks/session-start.sh` — SessionStart フック(v1 方式のカーネル注入)
-- `skills/` — 6 つのプロトコルスキル(deep-insight, spec-first, fresh-verify, long-run, session-memory, grounded-report)
-- `agents/` — verifier(fresh-context 敵対的検証者)/ investigator(並列仮説検証者)
-- `eval/` — 効果計測ツール(タスク×モデル×harness条件で実行し、5観点rubricで採点)
+## Layout
 
-## インストール
+- `kernel/kernel.md` — 6 standing disciplines + skill dispatch table + completion gate (v2: injected into the system prompt)
+- `hooks/stop-verify.sh` — Stop hook; bounces completion claims that lack a full-suite test run (the core of v2)
+- `hooks/session-start.sh` — SessionStart hook (v1-style kernel injection)
+- `skills/` — 6 protocol skills (deep-insight, spec-first, fresh-verify, long-run, session-memory, grounded-report)
+- `agents/` — verifier (fresh-context adversarial verifier) / investigator (parallel hypothesis tester)
+- `eval/` — measurement pipeline (run tasks × models × harness conditions, score against the 5-criterion rubric)
 
-1. `./install.sh` を実行(~/.claude/skills, ~/.claude/agents へ symlink)
-2. 表示される settings フラグメントを ~/.claude/settings.json にマージ
-3. 新しいセッションを開始
+## Install
 
-## 評価の実行
+1. Run `./install.sh` (symlinks into ~/.claude/skills and ~/.claude/agents)
+2. Merge the printed settings fragment into ~/.claude/settings.json
+3. Start a new Claude Code session
+
+## Running the evaluation
 
 ```
-./eval/run.sh <task-dir> <model> <off|on|on2> <rep>   # 1条件を実行
-python3 eval/grade.py <run-dir>                        # 採点(機械チェック+ブラインドLLM判定)
-python3 eval/report.py                                 # 集計とグラフ(report.html)の再生成
-./eval/matrix.sh                                       # フルマトリクス
+./eval/run.sh <task-dir> <model> <off|on|on2> <rep>   # one condition
+python3 eval/grade.py <run-dir>                        # score (mechanical checks + blind LLM judge)
+python3 eval/report.py                                 # regenerate aggregation + charts (report.html)
+./eval/matrix.sh                                       # full matrix
 ```
 
-`off` = harness なし / `on` = v1(SessionStart 注入) / `on2` = v2(system prompt + Stop フック)
+`off` = no harness / `on` = v1 (SessionStart injection) / `on2` = v2 (system prompt + Stop hook)
 
-## 設計文書
+## Documents
 
-- 設計: `docs/specs/2026-07-05-fable-harness-design.md`
-- 実装計画: `docs/plans/2026-07-05-fable-harness.md`
-- 実験結果と診断: `eval/results/summary.md`
+- Design spec: `docs/specs/2026-07-05-fable-harness-design.md` (Japanese)
+- Implementation plan: `docs/plans/2026-07-05-fable-harness.md` (Japanese)
+- Experiment results & diagnosis: `eval/results/summary.md` (Japanese)
