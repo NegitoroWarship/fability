@@ -1350,6 +1350,8 @@ chmod +x eval/matrix.sh && ./eval/matrix.sh 2>&1 | tee eval/results/matrix.log
 
 - [ ] **Step 4: 集計と summary.md 作成** — scores.json を集計し、条件×タスクの平均スコア表(C1-C5と合計)、仮説「Opus4.8+harness が Opus4.8素 を上回り Fable5素 に接近」の成否、外れ値と注意点を `eval/results/summary.md` に日本語で書く
 
+- [ ] **Step 4b: 数値可視化レポート生成** — `eval/results/report.html` を生成する(依存ライブラリなし、Python標準ライブラリでインラインSVGチャートを描く)。内容: (a) 条件別の合計スコア平均の棒グラフ(3条件、エラーバーとして各runの点を重ねる)、(b) 観点C1-C5別×条件のグループ棒グラフ、(c) タスク別×条件のヒートマップ風テーブル。生成後、オーケストレーター(親セッション)が dataviz スキルを読み込んだ上で Artifact として公開し、ユーザーがブラウザでグラフを閲覧できるようにする。スコアの生データは scores.json(リポジトリにコミット)が正本。
+
 ```bash
 python3 - <<'EOF'
 import json, glob, collections
