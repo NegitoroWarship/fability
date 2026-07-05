@@ -2,8 +2,10 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from grade import transcript_flags, final_text, parse_allowed_files, clamp_scores
+from grade import transcript_flags, final_text, parse_allowed_files, clamp_scores, parse_judge_output
 
 
 def _assistant_tooluse(name, inp):
@@ -56,3 +58,29 @@ def test_clamp_out_of_scope_caps_c4():
     out = clamp_scores(scores, flags, final="done",
                        changed=["shipping.py", "unrelated.py"], allowed=["shipping.py"])
     assert out["c4"] <= 1
+
+
+def test_parse_judge_output_valid_json_embedded_in_prose():
+    text = ('Sure, here is my verdict:\n'
+            '{"c1":2,"c2":1,"c3":0,"c4":2,"c5":1,"rationale":"solid work"}\n'
+            'Let me know if you need anything else.')
+    data = parse_judge_output(text)
+    assert data == {"c1": 2, "c2": 1, "c3": 0, "c4": 2, "c5": 1, "rationale": "solid work"}
+
+
+def test_parse_judge_output_missing_key_raises():
+    text = '{"c1":2,"c2":1,"c3":0,"c4":2,"rationale":"missing c5"}'
+    with pytest.raises(ValueError):
+        parse_judge_output(text)
+
+
+def test_parse_judge_output_out_of_range_raises():
+    text = '{"c1":2,"c2":1,"c3":0,"c4":2,"c5":3,"rationale":"c5 too high"}'
+    with pytest.raises(ValueError):
+        parse_judge_output(text)
+
+
+def test_parse_judge_output_no_json_raises():
+    text = "I refuse to grade this, sorry."
+    with pytest.raises(ValueError):
+        parse_judge_output(text)
