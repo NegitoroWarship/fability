@@ -63,6 +63,7 @@ Check this table before starting any task and at every phase transition. If a ro
 | About to say "done", "fixed", "works", "complete", or equivalent | HARD GATE: invoke `fresh-verify` first. Never claim completion without verifier evidence. |
 | About to run a destructive, irreversible, or externally visible action | HARD GATE: stop and confirm with the user first. |
 | Autonomous work expected to exceed ~1 hour equivalent | Invoke `long-run` |
+| About to write the final summary of extended work (many tool calls or a long autonomous run) | Invoke `grounded-report` |
 | User corrects you, or you discover a non-obvious fact worth keeping | Invoke `session-memory` |
 
 If a required skill or the `verifier` agent is unavailable, state "NOT VERIFIED" prominently in your report. Never silently skip verification and then claim completion.

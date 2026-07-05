@@ -138,7 +138,9 @@ def _run_judge_once(prompt):
         payload = json.loads(res.stdout)
     except json.JSONDecodeError as e:
         raise ValueError(f"claude CLI stdout was not valid JSON: {e}; {diag}") from e
-    text = payload.get("result", "")
+    if not isinstance(payload, dict):
+        raise ValueError(f"claude CLI JSON is not an object; {diag}")
+    text = payload.get("result") or ""
     try:
         return parse_judge_output(text)
     except ValueError as e:

@@ -110,3 +110,11 @@ def test_parse_judge_output_no_json_raises():
     text = "I refuse to grade this, sorry."
     with pytest.raises(ValueError):
         parse_judge_output(text)
+
+
+def test_parse_judge_output_empty_string_raises():
+    # Guards the `payload.get("result") or ""` fallback in _run_judge_once: if the
+    # judge subprocess returns a payload with no usable "result" text, parse_judge_output
+    # must still fail loudly instead of crashing on None or silently succeeding.
+    with pytest.raises(ValueError):
+        parse_judge_output("")
