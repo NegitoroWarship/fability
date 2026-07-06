@@ -19,9 +19,7 @@ Discipline benchmark: 4 tasks × 5-criterion rubric × 8 runs per condition, sco
 
 On this benchmark, Opus 4.8 + harness v2 scores identical to bare Fable 5 — down to the per-criterion means.
 
-[![Mean total score by condition: harness v2 matches bare Fable 5](eval/results/score-summary.svg)](eval/results/report.html)
-
-Figure: mean total score by condition; dots are individual runs. Open the full interactive report: [`eval/results/report.html`](eval/results/report.html). Full written analysis: [`eval/results/summary.md`](eval/results/summary.md).
+Open the full interactive report: [`eval/results/report.html`](eval/results/report.html). Full written analysis: [`eval/results/summary.md`](eval/results/summary.md).
 
 The v1→v2 delta is the project's central finding: **discipline must be delivered as mechanism, not instruction.**
 

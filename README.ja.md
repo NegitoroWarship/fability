@@ -17,7 +17,7 @@ English version: [README.md](README.md)
 | Opus 4.8 + harness v1(プロンプト注入のみ) | 8.88 | 1.46 |
 | **Opus 4.8 + harness v2** | **9.88** | **0.35** |
 
-Opus 4.8 + harness v2 は、本ベンチマークにおいて Fable 5 素と同スコア(5観点の平均値まで一致)。詳細な集計・グラフは [`eval/results/summary.ja.md`](eval/results/summary.ja.md) と `eval/results/report.html`(英語、要ブラウザ)を参照。
+Opus 4.8 + harness v2 は、本ベンチマークにおいて Fable 5 素と同スコア(5観点の平均値まで一致)。詳細な対話型レポートは [`eval/results/report.html`](eval/results/report.html)(英語、要ブラウザ)、文章での分析は [`eval/results/summary.ja.md`](eval/results/summary.ja.md) を参照。
 
 v1→v2 の差分が本プロジェクトの中心的知見: **規律は指示ではなく機構として与える。**
 - v1(カーネルを additionalContext として注入)は検証ハードゲートがほぼ発火せず、素の Opus 4.8 とほぼ同スコア
