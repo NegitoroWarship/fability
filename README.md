@@ -6,6 +6,35 @@ Fability is a harness for pushing Opus 4.8 closer to Fable 5 behavior by turning
 
 日本語版: [README.ja.md](README.ja.md)
 
+```text
+                  Fable 5 behavior catalog
+          (discipline Fable tends to apply naturally)
+                                  |
+                                  | codify
+                                  v
+  +----------------------------------------------------------------+
+  |                            fability                            |
+  |                                                                |
+  |  system-prompt kernel     protocol skills      enforcement     |
+  |  always-on disciplines    concrete workflows   Stop hook gate  |
+  |          |                      |                    |          |
+  |          v                      v                    v          |
+  |  spec-first / deep       fresh verification     no full-suite   |
+  |  insight / memory        verifier agents        evidence, no    |
+  |  grounded reports        long-run protocol      completion      |
+  +----------------------------------------------------------------+
+                                  |
+                                  | delivered through Opus 4.8's
+                                  | literal instruction-following
+                                  v
+                         Opus 4.8 + harness v2
+                                  |
+                                  v
+                 Fable-5-like discipline on this benchmark
+```
+
+Fability does not make Opus 4.8 into Fable 5. It moves the missing discipline out of wishful prompting and into mechanisms Opus 4.8 is good at following.
+
 ## Results
 
 Discipline benchmark: 4 tasks × 5-criterion rubric × 8 runs per condition, scored by a blind Sonnet 5 judge plus mechanical checks.
