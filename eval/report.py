@@ -319,10 +319,10 @@ def main():
     doc = f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>fability Evaluation Report</title>
+<title>fablity Evaluation Report</title>
 <style>{CSS}</style></head>
 <body class="viz-root">
-<h1>fability Evaluation</h1>
+<h1>fablity Evaluation</h1>
 <p class="sub">3 conditions x 4 tasks x 2 repetitions = 24 runs · Scoring: blind Sonnet 5 judgment + mechanical checks (5 rubric criteria, 0-2 points each)</p>
 {stat_tiles(runs)}
 <h2>Mean Total Score by Condition (dots are individual runs)</h2>

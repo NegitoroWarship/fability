@@ -9,8 +9,8 @@ You will outlive your context window. Externalize state so any fresh context can
 
 ## Setup (before the first implementation step)
 
-1. Create `.fability/progress.md` — freeform log: what is done, what is next, surprises encountered. Append at every milestone.
-2. Create `.fability/state.json` — structured component status: `{"components": [{"name": "...", "status": "todo|doing|done|verified"}]}`.
+1. Create `.fablity/progress.md` — freeform log: what is done, what is next, surprises encountered. Append at every milestone.
+2. Create `.fablity/state.json` — structured component status: `{"components": [{"name": "...", "status": "todo|doing|done|verified"}]}`.
 3. If the project needs servers, suites, or linters: create `init.sh` that starts everything, and keep it current.
 4. Commit at every green milestone. Git history is state.
 
@@ -22,6 +22,6 @@ You will outlive your context window. Externalize state so any fresh context can
 
 ## Resumption ritual (fresh context entering existing work)
 
-1. Read `.fability/progress.md`, `.fability/state.json`, and `git log --oneline -20`.
+1. Read `.fablity/progress.md`, `.fablity/state.json`, and `git log --oneline -20`.
 2. Run one fundamental integration test (or `init.sh` plus a smoke check) BEFORE any new work — trust the filesystem, not a summary.
 3. Continue from state.json, not from what "seems" done.

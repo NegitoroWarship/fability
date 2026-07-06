@@ -1,4 +1,4 @@
-# fability 設計文書
+# fablity 設計文書
 
 日付: 2026-07-05
 状態: 承認済み(ユーザーレビュー待ち)
@@ -49,7 +49,7 @@ Fable 5 のプロンプティングガイド([prompting-claude-fable-5](https://
 ├── kernel/
 │   └── kernel.md              # 常時注入される認知カーネル(約1.5〜2Kトークン)
 ├── skills/
-│   ├── fability/              # npx skills add 用の同梱plugin package
+│   ├── fablity/              # npx skills add 用の同梱plugin package
 │   ├── deep-insight/SKILL.md
 │   ├── spec-first/SKILL.md
 │   ├── fresh-verify/SKILL.md
@@ -121,7 +121,7 @@ SessionStart フックで毎セッション注入。6つの規律で構成:
 - テストの削除・改変禁止を明記
 - 再開時: progress.md と git log を読み、統合テスト1本を走らせてから新規作業
 
-**session-memory** — 教訓記録。1教訓1ファイル+1行サマリー。保存先 `.fability/lessons/`。リポジトリ・会話履歴が既に記録するものは保存しない。誤りと判明したメモは削除。
+**session-memory** — 教訓記録。1教訓1ファイル+1行サマリー。保存先 `.fablity/lessons/`。リポジトリ・会話履歴が既に記録するものは保存しない。誤りと判明したメモは削除。
 
 **grounded-report** — 報告品質。作業中の語彙を捨て再接地として書く: 結論1文→必要な1〜2点→根拠。各主張の証拠裏付けをセルフチェックしてから送信。
 
@@ -140,7 +140,7 @@ SessionStart フックで毎セッション注入。6つの規律で構成:
 - `session-start.sh`: kernel.md を標準出力に出すのみ。失敗してもセッションは壊れない
 - `stop-verify.sh`: transcript にフルテストスイート実行の証拠がない完了を差し戻す。2回目の停止は無限ループ防止のため通す
 - `hooks/hooks.json`: skills-directory plugin としてロードされたときに SessionStart/Stop フックを有効化する
-- `skills/fability/`: `npx skills add NegitoroWarship/fability --global --agent claude-code --skill fability --yes` で `~/.claude/skills/fability` に入る同梱plugin package。skills/agents/hooks を plugin として Claude Code に読ませる
+- `skills/fablity/`: `npx skills add NegitoroWarship/fablity --global --agent claude-code --skill fablity --yes` で `~/.claude/skills/fablity` に入る同梱plugin package。skills/agents/hooks を plugin として Claude Code に読ませる
 - `install.sh`: ローカル checkout 用に `npx skills add .` を呼ぶ互換 wrapper。`~/.claude/settings.json` は直接編集しない
 
 ### エラー処理方針

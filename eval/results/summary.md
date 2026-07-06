@@ -1,4 +1,4 @@
-# fability Evaluation Results Summary
+# fablity Evaluation Results Summary
 
 日本語版: [summary.ja.md](summary.ja.md)
 

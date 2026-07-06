@@ -22,7 +22,7 @@ cp -r "$TASK_DIR/workspace/." "$WORK/"
 cat > "$WORK/.gitignore" <<'GITIGNORE'
 __pycache__/
 *.pyc
-.fability/
+.fablity/
 .claude/
 GITIGNORE
 

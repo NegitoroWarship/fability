@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "__FABILITY_REPO__/hooks/session-start.sh"
+            "command": "__FABLITY_REPO__/hooks/session-start.sh"
           }
         ]
       }
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "__FABILITY_REPO__/hooks/stop-verify.sh"
+            "command": "__FABLITY_REPO__/hooks/stop-verify.sh"
           }
         ]
       }

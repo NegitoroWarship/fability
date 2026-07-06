@@ -1,8 +1,8 @@
-diff --git a/.fability/minispec.md b/.fability/minispec.md
+diff --git a/.fablity/minispec.md b/.fablity/minispec.md
 new file mode 100644
 index 0000000..7db11de
 --- /dev/null
-+++ b/.fability/minispec.md
++++ b/.fablity/minispec.md
 @@ -0,0 +1,12 @@
 +# Mini-spec: fix test_iso_dates
 +

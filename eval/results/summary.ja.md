@@ -1,4 +1,4 @@
-# fability 検証実験 結果サマリー
+# fablity 検証実験 結果サマリー
 
 English version: [summary.md](summary.md)
 

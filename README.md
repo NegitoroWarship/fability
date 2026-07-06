@@ -1,8 +1,8 @@
-# fability
+# fablity
 
 A Claude Code harness that closes the discipline gap between Claude Opus 4.8 and Claude Fable 5 — by mechanism, not by prompt.
 
-Fability is a harness for pushing Opus 4.8 closer to Fable 5 behavior by turning Fable-like discipline into explicit protocols, system-prompt injection, and hook-level enforcement.
+Fablity is a harness for pushing Opus 4.8 closer to Fable 5 behavior by turning Fable-like discipline into explicit protocols, system-prompt injection, and hook-level enforcement.
 
 日本語版: [README.ja.md](README.ja.md)
 
@@ -13,7 +13,7 @@ Fability is a harness for pushing Opus 4.8 closer to Fable 5 behavior by turning
                                   | codify
                                   v
   +----------------------------------------------------------------+
-  |                            fability                            |
+  |                            fablity                             |
   |                                                                |
   |  system-prompt kernel     protocol skills      enforcement     |
   |  always-on disciplines    concrete workflows   Stop hook gate  |
@@ -33,7 +33,7 @@ Fability is a harness for pushing Opus 4.8 closer to Fable 5 behavior by turning
                  Fable-5-like discipline on this benchmark
 ```
 
-Fability does not make Opus 4.8 into Fable 5. It moves the missing discipline out of wishful prompting and into mechanisms Opus 4.8 is good at following.
+Fablity does not make Opus 4.8 into Fable 5. It moves the missing discipline out of wishful prompting and into mechanisms Opus 4.8 is good at following.
 
 ## Results
 
@@ -70,24 +70,24 @@ Fable 5's prompting guide is effectively a catalog of behaviors Fable 5 exhibits
 
 ## Install
 
-Install fability directly from GitHub with `npx skills add`:
+Install fablity directly from GitHub with `npx skills add`:
 
 ```bash
-npx --yes skills@latest add NegitoroWarship/fability \
+npx --yes skills@latest add NegitoroWarship/fablity \
   --global \
   --agent claude-code \
-  --skill fability \
+  --skill fablity \
   --yes
 ```
 
-This installs `fability` into `~/.claude/skills` as a Claude Code skills-directory plugin. The plugin bundles:
+This installs `fablity` into `~/.claude/skills` as a Claude Code skills-directory plugin. The plugin bundles:
 
 - the six protocol skills
 - the verifier/investigator agents
 - the SessionStart hook that injects the kernel
 - the Stop hook that enforces full-suite verification evidence before completion claims
 
-Existing unrelated skills are left alone. A same-named `fability` install may be updated. The `--skill fability` flag selects the single bundled plugin package instead of the individual protocol skills. After installation, start a new Claude Code session, or run `/reload-plugins` in an existing session.
+Existing unrelated skills are left alone. A same-named `fablity` install may be updated. The `--skill fablity` flag selects the single bundled plugin package instead of the individual protocol skills. After installation, start a new Claude Code session, or run `/reload-plugins` in an existing session.
 
 You do not need to explicitly invoke the skills for the main harness behavior: the SessionStart hook injects the kernel automatically, and the Stop hook mechanically enforces full-suite verification before completion claims.
 
@@ -97,7 +97,7 @@ For a local checkout, run the same install against the repository root:
 npx --yes skills@latest add . \
   --global \
   --agent claude-code \
-  --skill fability \
+  --skill fablity \
   --yes
 ```
 
@@ -105,10 +105,10 @@ npx --yes skills@latest add . \
 
 ## Uninstall
 
-Remove fability with `npx`:
+Remove fablity with `npx`:
 
 ```bash
-npx --yes skills@latest remove fability \
+npx --yes skills@latest remove fablity \
   --global \
   --agent claude-code \
   --yes
@@ -139,6 +139,6 @@ python3 eval/report.py                                 # regenerate aggregation 
 
 ## Documents
 
-- Design spec: `docs/specs/2026-07-05-fability-design.md` (Japanese)
-- Implementation plan: `docs/plans/2026-07-05-fability.md` (Japanese)
+- Design spec: `docs/specs/2026-07-05-fablity-design.md` (Japanese)
+- Implementation plan: `docs/plans/2026-07-05-fablity.md` (Japanese)
 - Experiment results & diagnosis: `eval/results/summary.md`
