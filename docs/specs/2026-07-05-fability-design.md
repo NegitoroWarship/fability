@@ -59,10 +59,11 @@ Fable 5 のプロンプティングガイド([prompting-claude-fable-5](https://
 │   ├── verifier.md
 │   └── investigator.md
 ├── hooks/
-│   └── session-start.sh       # kernel.md を出力する数行のスクリプト
+│   ├── session-start.sh       # kernel.md を出力する数行のスクリプト
+│   └── stop-verify.sh         # フルスイート検証なしの完了を差し戻す Stop フック
 ├── eval/                      # 評価計測ツール(後述)
-├── settings-fragment.json     # SessionStart フック設定の雛形
-├── install.sh                 # symlink 配置と settings.json 追記の案内
+├── settings-fragment.json     # SessionStart/Stop フック設定の参照用雛形
+├── install.sh                 # skills/agents 配置と settings.json 自動マージ
 ├── docs/specs/
 └── README.md                  # 日本語の解説・導入手順
 ```
@@ -133,7 +134,8 @@ SessionStart フックで毎セッション注入。6つの規律で構成:
 ### フックと導入
 
 - `session-start.sh`: kernel.md を標準出力に出すのみ。失敗してもセッションは壊れない
-- `install.sh`: skills/agents の symlink を `~/.claude/skills/`・`~/.claude/agents/` に作成。settings.json への SessionStart フック追記は自動改変せず案内する
+- `stop-verify.sh`: transcript にフルテストスイート実行の証拠がない完了を差し戻す。2回目の停止は無限ループ防止のため通す
+- `install.sh`: skills を `npx skills add` で `~/.claude/skills/` にインストールし、agents を `~/.claude/agents/` に symlink する。さらに既存 settings をバックアップした上で、SessionStart/Stop フックを `~/.claude/settings.json` に自動マージする
 - プラグイン化: plugin.json を追加するだけで移行できるレイアウトを維持
 
 ### エラー処理方針

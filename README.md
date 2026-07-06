@@ -43,9 +43,20 @@ Fable 5's prompting guide is effectively a catalog of behaviors Fable 5 exhibits
 
 ## Install
 
-1. Run `./install.sh` (installs skills with `npx skills add` into `~/.claude/skills`, then symlinks agents into `~/.claude/agents`)
-2. Merge the printed settings fragment into ~/.claude/settings.json
-3. Start a new Claude Code session
+Run the installer from this repository root:
+
+```bash
+./install.sh
+```
+
+The installer:
+
+- installs the six protocol skills with `npx skills add` into `~/.claude/skills`
+- symlinks the verifier/investigator agents into `~/.claude/agents`
+- merges the SessionStart and Stop hooks into `~/.claude/settings.json`
+- backs up an existing settings file before editing it
+
+After installation, start a new Claude Code session. You do not need to explicitly invoke the skills for the main harness behavior: the SessionStart hook injects the kernel automatically, and the Stop hook mechanically enforces full-suite verification before completion claims.
 
 To install only the skills directly with `npx` from this repository root:
 
@@ -58,7 +69,7 @@ npx --yes skills@latest add . \
   --yes
 ```
 
-This leaves unrelated existing skills alone. A same-named installed skill may be updated.
+This leaves unrelated existing skills alone. A same-named installed skill may be updated. This installs the skills only; it does not enable the kernel or Stop hook. Use `./install.sh` for the turnkey harness.
 
 ## Uninstall
 
@@ -72,7 +83,7 @@ npx --yes skills@latest remove \
   --yes
 ```
 
-Do not use `--all` or `--skill '*'` unless you intend to remove all matching skills. The `npx skills remove` command does not remove the `~/.claude/agents` symlinks or settings entries; remove those separately if needed.
+Do not use `--all` or `--skill '*'` unless you intend to remove all matching skills. The `npx skills remove` command does not remove the `~/.claude/agents` symlinks or `~/.claude/settings.json` hook entries; remove those separately if needed.
 
 ## Running the evaluation
 
