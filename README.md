@@ -41,37 +41,51 @@ Fable 5's prompting guide is effectively a catalog of behaviors Fable 5 exhibits
 
 ## Install
 
-Run the installer from this repository root:
+Install fability directly from GitHub with `npx skills add`:
 
 ```bash
-./install.sh
+npx --yes skills@latest add NegitoroWarship/fability \
+  --global \
+  --agent claude-code \
+  --yes
 ```
 
-The installer:
+This installs `fability` into `~/.claude/skills` as a Claude Code skills-directory plugin. The plugin bundles:
 
-- installs the six protocol skills with `npx skills add` into `~/.claude/skills`
-- symlinks the verifier/investigator agents into `~/.claude/agents`
-- merges the SessionStart and Stop hooks into `~/.claude/settings.json`
-- backs up an existing settings file before editing it
+- the six protocol skills
+- the verifier/investigator agents
+- the SessionStart hook that injects the kernel
+- the Stop hook that enforces full-suite verification evidence before completion claims
 
-After installation, start a new Claude Code session. You do not need to explicitly invoke the skills for the main harness behavior: the SessionStart hook injects the kernel automatically, and the Stop hook mechanically enforces full-suite verification before completion claims.
+Existing unrelated skills are left alone. A same-named `fability` install may be updated. After installation, start a new Claude Code session, or run `/reload-plugins` in an existing session.
 
-To install only the skills directly with `npx` from this repository root:
+You do not need to explicitly invoke the skills for the main harness behavior: the SessionStart hook injects the kernel automatically, and the Stop hook mechanically enforces full-suite verification before completion claims.
+
+For a local checkout, run the same install against the repository root:
 
 ```bash
 npx --yes skills@latest add . \
   --global \
   --agent claude-code \
-  --skill '*' \
-  --full-depth \
   --yes
 ```
 
-This leaves unrelated existing skills alone. A same-named installed skill may be updated. This installs the skills only; it does not enable the kernel or Stop hook. Use `./install.sh` for the turnkey harness.
+`./install.sh` remains only as a compatibility wrapper around the local `npx skills add .` command.
 
 ## Uninstall
 
-Remove the fability skills with `npx`:
+Remove fability with `npx`:
+
+```bash
+npx --yes skills@latest remove fability \
+  --global \
+  --agent claude-code \
+  --yes
+```
+
+Do not use `--all` or `--skill '*'` unless you intend to remove all matching skills. Restart Claude Code, or run `/reload-plugins`, after removal.
+
+Older pre-plugin installs used six standalone skills. If you installed one of those versions, remove them with:
 
 ```bash
 npx --yes skills@latest remove \
@@ -80,8 +94,6 @@ npx --yes skills@latest remove \
   --agent claude-code \
   --yes
 ```
-
-Do not use `--all` or `--skill '*'` unless you intend to remove all matching skills. The `npx skills remove` command does not remove the `~/.claude/agents` symlinks or `~/.claude/settings.json` hook entries; remove those separately if needed.
 
 ## Running the evaluation
 

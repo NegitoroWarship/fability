@@ -59,11 +59,14 @@ Fable 5 のプロンプティングガイド([prompting-claude-fable-5](https://
 │   ├── verifier.md
 │   └── investigator.md
 ├── hooks/
+│   ├── hooks.json              # skills-directory plugin 用フック定義
 │   ├── session-start.sh       # kernel.md を出力する数行のスクリプト
 │   └── stop-verify.sh         # フルスイート検証なしの完了を差し戻す Stop フック
+├── .claude-plugin/
+│   └── plugin.json             # npx skills add で入る Claude Code plugin 定義
 ├── eval/                      # 評価計測ツール(後述)
-├── settings-fragment.json     # SessionStart/Stop フック設定の参照用雛形
-├── install.sh                 # skills/agents 配置と settings.json 自動マージ
+├── settings-fragment.json     # 直接 settings に入れる場合の参照用雛形
+├── install.sh                 # npx skills add . の互換 wrapper
 ├── docs/specs/
 └── README.md                  # 日本語の解説・導入手順
 ```
@@ -135,8 +138,9 @@ SessionStart フックで毎セッション注入。6つの規律で構成:
 
 - `session-start.sh`: kernel.md を標準出力に出すのみ。失敗してもセッションは壊れない
 - `stop-verify.sh`: transcript にフルテストスイート実行の証拠がない完了を差し戻す。2回目の停止は無限ループ防止のため通す
-- `install.sh`: skills を `npx skills add` で `~/.claude/skills/` にインストールし、agents を `~/.claude/agents/` に symlink する。さらに既存 settings をバックアップした上で、SessionStart/Stop フックを `~/.claude/settings.json` に自動マージする
-- プラグイン化: plugin.json を追加するだけで移行できるレイアウトを維持
+- `hooks/hooks.json`: skills-directory plugin としてロードされたときに SessionStart/Stop フックを有効化する
+- `.claude-plugin/plugin.json`: `npx skills add NegitoroWarship/fability --global --agent claude-code --yes` でリポジトリ全体を `~/.claude/skills/fability` に入れ、skills/agents/hooks を plugin として Claude Code に読ませる
+- `install.sh`: ローカル checkout 用に `npx skills add .` を呼ぶ互換 wrapper。`~/.claude/settings.json` は直接編集しない
 
 ### エラー処理方針
 
