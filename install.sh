@@ -14,6 +14,7 @@ echo "Installing fability for Claude Code with npx skills add..."
 npx --yes "$SKILLS_CLI_PACKAGE" add "$ROOT" \
   --global \
   --agent claude-code \
+  --skill fability \
   --yes
 
 cat <<EOF

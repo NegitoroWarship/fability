@@ -47,6 +47,7 @@ GitHub から `npx skills add` で直接インストールします:
 npx --yes skills@latest add NegitoroWarship/fability \
   --global \
   --agent claude-code \
+  --skill fability \
   --yes
 ```
 
@@ -57,7 +58,7 @@ npx --yes skills@latest add NegitoroWarship/fability \
 - kernel を注入する SessionStart hook
 - 完了宣言前のフルスイート検証証拠を強制する Stop hook
 
-既存の無関係なスキルは残ります。同名の `fability` が既にある場合は更新される場合があります。インストール後、新しい Claude Code セッションを開始するか、既存セッションで `/reload-plugins` を実行してください。
+既存の無関係なスキルは残ります。同名の `fability` が既にある場合は更新される場合があります。`--skill fability` は、個別のプロトコルスキルではなく同梱plugin packageだけを選ぶために指定しています。インストール後、新しい Claude Code セッションを開始するか、既存セッションで `/reload-plugins` を実行してください。
 
 主な harness 動作のために skill を明示的に呼び出す必要はありません。SessionStart hook が kernel を自動注入し、Stop hook が完了宣言前のフルスイート検証を機構的に強制します。
 
@@ -67,6 +68,7 @@ npx --yes skills@latest add NegitoroWarship/fability \
 npx --yes skills@latest add . \
   --global \
   --agent claude-code \
+  --skill fability \
   --yes
 ```
 

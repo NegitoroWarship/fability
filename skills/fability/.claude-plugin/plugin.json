@@ -1,0 +1,9 @@
+{
+  "name": "fability",
+  "description": "Claude Code harness for pushing Opus 4.8 closer to Fable 5 behavior with protocol skills, verifier agents, and hook-enforced completion discipline.",
+  "author": {
+    "name": "NegitoroWarship"
+  },
+  "repository": "https://github.com/NegitoroWarship/fability",
+  "license": "MIT"
+}

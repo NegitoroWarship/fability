@@ -47,6 +47,7 @@ Install fability directly from GitHub with `npx skills add`:
 npx --yes skills@latest add NegitoroWarship/fability \
   --global \
   --agent claude-code \
+  --skill fability \
   --yes
 ```
 
@@ -57,7 +58,7 @@ This installs `fability` into `~/.claude/skills` as a Claude Code skills-directo
 - the SessionStart hook that injects the kernel
 - the Stop hook that enforces full-suite verification evidence before completion claims
 
-Existing unrelated skills are left alone. A same-named `fability` install may be updated. After installation, start a new Claude Code session, or run `/reload-plugins` in an existing session.
+Existing unrelated skills are left alone. A same-named `fability` install may be updated. The `--skill fability` flag selects the single bundled plugin package instead of the individual protocol skills. After installation, start a new Claude Code session, or run `/reload-plugins` in an existing session.
 
 You do not need to explicitly invoke the skills for the main harness behavior: the SessionStart hook injects the kernel automatically, and the Stop hook mechanically enforces full-suite verification before completion claims.
 
@@ -67,6 +68,7 @@ For a local checkout, run the same install against the repository root:
 npx --yes skills@latest add . \
   --global \
   --agent claude-code \
+  --skill fability \
   --yes
 ```
 

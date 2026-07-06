@@ -49,6 +49,7 @@ Fable 5 のプロンプティングガイド([prompting-claude-fable-5](https://
 ├── kernel/
 │   └── kernel.md              # 常時注入される認知カーネル(約1.5〜2Kトークン)
 ├── skills/
+│   ├── fability/              # npx skills add 用の同梱plugin package
 │   ├── deep-insight/SKILL.md
 │   ├── spec-first/SKILL.md
 │   ├── fresh-verify/SKILL.md
@@ -139,7 +140,7 @@ SessionStart フックで毎セッション注入。6つの規律で構成:
 - `session-start.sh`: kernel.md を標準出力に出すのみ。失敗してもセッションは壊れない
 - `stop-verify.sh`: transcript にフルテストスイート実行の証拠がない完了を差し戻す。2回目の停止は無限ループ防止のため通す
 - `hooks/hooks.json`: skills-directory plugin としてロードされたときに SessionStart/Stop フックを有効化する
-- `.claude-plugin/plugin.json`: `npx skills add NegitoroWarship/fability --global --agent claude-code --yes` でリポジトリ全体を `~/.claude/skills/fability` に入れ、skills/agents/hooks を plugin として Claude Code に読ませる
+- `skills/fability/`: `npx skills add NegitoroWarship/fability --global --agent claude-code --skill fability --yes` で `~/.claude/skills/fability` に入る同梱plugin package。skills/agents/hooks を plugin として Claude Code に読ませる
 - `install.sh`: ローカル checkout 用に `npx skills add .` を呼ぶ互換 wrapper。`~/.claude/settings.json` は直接編集しない
 
 ### エラー処理方針
