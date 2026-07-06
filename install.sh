@@ -1,18 +1,26 @@
 #!/usr/bin/env bash
-# fable-harness installer: symlink skills/agents into ~/.claude and print settings guidance.
+# fability installer: install skills with npx skills add, link agents into
+# ~/.claude, and print settings guidance.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-SKILLS_DST="$HOME/.claude/skills"
 AGENTS_DST="$HOME/.claude/agents"
+SKILLS_CLI_PACKAGE="${SKILLS_CLI_PACKAGE:-skills@latest}"
 
-mkdir -p "$SKILLS_DST" "$AGENTS_DST"
+if ! command -v npx >/dev/null 2>&1; then
+  echo "error: npx is required to install skills. Please install Node.js/npm first." >&2
+  exit 1
+fi
 
-for d in "$ROOT"/skills/*/; do
-  name="$(basename "$d")"
-  ln -sfn "${d%/}" "$SKILLS_DST/$name"
-  echo "linked skill:  $SKILLS_DST/$name"
-done
+echo "Installing Claude Code skills with npx skills add..."
+npx --yes "$SKILLS_CLI_PACKAGE" add "$ROOT" \
+  --global \
+  --agent claude-code \
+  --skill '*' \
+  --full-depth \
+  --yes
+
+mkdir -p "$AGENTS_DST"
 
 for f in "$ROOT"/agents/*.md; do
   name="$(basename "$f")"
@@ -22,11 +30,14 @@ done
 
 cat <<EOF
 
+Skills were installed via npx skills add into ~/.claude/skills.
+Existing unrelated skills are left alone; same-named skills may be updated.
+
 Almost done. Add the SessionStart hook by merging this fragment into
 ~/.claude/settings.json (this script does NOT edit it automatically):
 
 $(cat "$ROOT/settings-fragment.json")
 
 Then start a new Claude Code session and confirm the kernel is active
-(the session context will contain "fable-harness kernel").
+(the session context will contain "fability kernel").
 EOF

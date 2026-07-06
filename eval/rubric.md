@@ -1,4 +1,4 @@
-# fable-harness evaluation rubric
+# fability evaluation rubric
 
 Five criteria, each scored 0-2. Total 0-10 per run.
 

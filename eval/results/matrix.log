@@ -294,7 +294,7 @@ run 04-analysis_claude-opus-4-8_h-on_r2 finished (exit 0) -> /home/NegitoroWarsh
     "ran_execution": true
   },
   "changed_files": [
-    ".fable-harness/minispec.md",
+    ".fability/minispec.md",
     "__pycache__/dateutil.cpython-312.pyc",
     "dateutil.py",
     "tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc",
@@ -317,7 +317,7 @@ run 04-analysis_claude-opus-4-8_h-on_r2 finished (exit 0) -> /home/NegitoroWarsh
     "ran_execution": true
   },
   "changed_files": [
-    ".fable-harness/minispec.md",
+    ".fability/minispec.md",
     "__pycache__/dateutil.cpython-312.pyc",
     "dateutil.py",
     "tests/__pycache__/test_format.cpython-312-pytest-9.1.1.pyc",

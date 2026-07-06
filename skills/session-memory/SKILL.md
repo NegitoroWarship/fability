@@ -7,7 +7,7 @@ description: Use when the user corrects you, when a confirmed approach works aft
 
 ## Store
 
-Write to `.fable-harness/lessons/<kebab-slug>.md` (create the directory if needed):
+Write to `.fability/lessons/<kebab-slug>.md` (create the directory if needed):
 
     # <one-line summary>
     **What**: the fact or correction.
@@ -21,4 +21,4 @@ Write to `.fable-harness/lessons/<kebab-slug>.md` (create the directory if neede
 
 ## Recall
 
-At the start of a task in a repo that has `.fable-harness/lessons/`, list the files and read their first lines (the summaries); read fully only the relevant ones.
+At the start of a task in a repo that has `.fability/lessons/`, list the files and read their first lines (the summaries); read fully only the relevant ones.

@@ -9,7 +9,7 @@ Write the mini-spec BEFORE touching code. It takes two minutes and doubles as th
 
 ## Mini-spec format
 
-Write to `.fable-harness/minispec.md` (create the directory if needed; overwrite per task):
+Write to `.fability/minispec.md` (create the directory if needed; overwrite per task):
 
 - **Goal**: one sentence.
 - **Success criteria**: numbered; each one mechanically checkable (a command plus its expected observation).

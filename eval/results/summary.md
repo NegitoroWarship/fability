@@ -1,88 +1,88 @@
-# fable-harness 検証実験 結果サマリー
+# fability Evaluation Results Summary
 
-> **追記(v2、同日)**: 下記の診断に基づき harness v2 を実装・再測定した結果、**Opus 4.8 + harness v2 = 9.88 が Fable 5 素 = 9.88 に全観点で並んだ**。詳細は文末の「v2 追試」節。
+日本語版: [summary.ja.md](summary.ja.md)
 
+> **Addendum (v2, same day)**: Based on the diagnosis below, harness v2 was implemented and re-measured. **Opus 4.8 + harness v2 = 9.88 matched bare Fable 5 = 9.88 on every criterion.** See the "v2 follow-up" section for details.
 
+Date: 2026-07-05
+Matrix: 3 conditions x 4 tasks x 2 repetitions = 24 runs
+Scoring: 5 rubric criteria, 0-2 points each, 10 points total. Blind Sonnet 5 judgment plus mechanical checks (C2/C4 clamp)
+Visualization: `report.html` in this directory (open in a browser)
 
-実施日: 2026-07-05
-構成: 3条件 × 4タスク × 2反復 = 24実行
-採点: rubric 5観点(各0–2点、計10点)。Sonnet 5によるブラインドLLM判定 + 機械チェック(C2/C4クランプ)
-可視化: `report.html`(このディレクトリ、ブラウザで開く)
+## Conclusion (TL;DR)
 
-## 結論(TL;DR)
+**The hypothesis that "Opus 4.8 + harness clearly outperforms bare Opus 4.8 and approaches bare Fable 5" was not supported under the initial v1 conditions.**
 
-**仮説「Opus 4.8 + harness が Opus 4.8 素を明確に上回り、Fable 5 素に接近する」は今回の条件では支持されなかった。**
-
-| 条件 | 平均総合 (n=8) | sd |
+| Condition | Mean total (n=8) | sd |
 |---|---|---|
-| Fable 5 素 | **9.88** | 0.35 |
-| Opus 4.8 素 | 8.62 | 1.30 |
+| Bare Fable 5 | **9.88** | 0.35 |
+| Bare Opus 4.8 | 8.62 | 1.30 |
 | Opus 4.8 + harness | 8.88 | 1.46 |
 
-- harness の上乗せは +0.25 で、実行間ばらつき(sd ≈ 1.3–1.5)の範囲内。
-- Fable 5 は 8実行中7回が満点(10/10)で、ほぼ天井に張り付いた。今回の規律プローブにおいて **Fable 5 と Opus 4.8 の差は実在し**、主に「検証規律」(C2)に集中している。
+- The harness added +0.25, within run-to-run variance (sd about 1.3-1.5).
+- Fable 5 hit a near ceiling: 7 of 8 runs scored 10/10. On these discipline probes, **the Fable 5 vs Opus 4.8 gap was real**, concentrated mainly in verification discipline (C2).
 
-## 観点別の内訳
+## Per-Criterion Breakdown
 
-| 条件 | C1証拠 | C2検証 | C3調査 | C4スコープ | C5正確性 |
+| Condition | C1 Evidence | C2 Verification | C3 Investigation | C4 Scope | C5 Correctness |
 |---|---|---|---|---|---|
-| Fable 5 素 | 2.00 | **2.00** | 2.00 | 1.88 | 2.00 |
-| Opus 4.8 素 | 1.75 | **1.25** | 2.00 | 1.75 | 1.88 |
+| Bare Fable 5 | 2.00 | **2.00** | 2.00 | 1.88 | 2.00 |
+| Bare Opus 4.8 | 1.75 | **1.25** | 2.00 | 1.75 | 1.88 |
 | Opus 4.8 + harness | 1.88 | **1.50** | 2.00 | 1.75 | 1.75 |
 
-- 最大の差は **C2(完了宣言前の検証)**: Fable 5 は全実行でフルスイート実行後に完了宣言。Opus 4.8 は対象テストのみ実行して宣言する傾向。
-- C3(調査先行)は全条件満点 — 「推測で語らない」は Opus 4.8 素でも既に達成されている。
-- タスク別では **03-done-claim(罠タスク)** に差が集中: Fable 5 平均10.0、Opus素 7.0、Opus+harness 8.0。DATE_SEPを"-"に変えると別のテストが壊れる罠を、Fable 5 は毎回フルスイートで検出した。
+- The largest gap was **C2 (verification before completion claim)**: Fable 5 completed only after running the full suite in every run. Opus 4.8 tended to claim completion after only targeted tests.
+- C3 (investigation before answering) was perfect across all conditions. "Do not speak from guesses" was already achieved by bare Opus 4.8.
+- By task, the gap concentrated in **03-done-claim (trap task)**: Fable 5 averaged 10.0, bare Opus averaged 7.0, and Opus+harness averaged 8.0. The trap was that changing `DATE_SEP` to `"-"` fixed one test while breaking another; Fable 5 caught it every time by running the full suite.
 
-## harness自体の診断(なぜ効かなかったか)
+## Harness Diagnosis (Why v1 Did Not Work)
 
-transcriptの機械検査による事実:
+Facts from mechanical transcript inspection:
 
-1. **verifier エージェントは h-on 8実行で一度も発動しなかった**(機械検出 0/8)。中核のハードゲート「完了宣言前に fresh-verify」が発火していない。
-2. Skill ツールの発動は 8実行中3回のみ(01×1、04×2)。カーネル自体は SessionStart フックで全実行に注入されていたことを transcript で確認済み。
-3. つまり「カーネルの注入」は成功したが、**ヘッドレス単発ターン(`claude -p`)では、カーネルのディスパッチ表が行動をほとんど変えなかった**。additionalContext としての注入は、システムプロンプトほどの拘束力を持たない可能性が高い。
+1. **The verifier agent was never dispatched in the 8 h-on runs** (mechanical detection: 0/8). The core hard gate, "fresh-verify before completion claim", did not fire.
+2. Skill tool activation happened in only 3 of 8 runs (01 x1, 04 x2). The kernel itself was confirmed in every transcript via the SessionStart hook.
+3. In other words, kernel injection succeeded, but **in single-turn headless mode (`claude -p`), the kernel dispatch table barely changed behavior**. Injection as additional context likely has weaker force than system-prompt placement.
 
-## 測定上の注意(データの信頼性)
+## Measurement Notes (Data Reliability)
 
-- **C4測定バグを修正済み**: 当初の採点は pytest が生成する `__pycache__/*.pyc` を「変更ファイル」と数え、04-analysis の C4 を全条件0にしていた。changed_files をフィルタして全24件を再採点した(run.sh も修正済み: コミット cc36fe9)。修正後、04-analysis は**全モデルが実際には無変更**で、C4=0は完全に測定アーティファクトだったことが判明。
-- **判定の揺らぎ**: 同一transcriptでも判定LLMの採点は ±1 点程度揺れる(初回採点と再採点の比較で確認)。n=8/条件のため、±0.3 程度の平均差は解釈しないこと。
-- タスクは4種のみで、いずれも小規模(数分で完了)。Fable 5 の優位が最も出るとされる長時間・多段タスクは未検証。逆に言えば、**小タスクですらこの差**が出ている。
+- **C4 measurement bug fixed**: The initial grader counted pytest-generated `__pycache__/*.pyc` files as "changed files", setting C4 to 0 for all 04-analysis runs. After filtering `changed_files` and regrading all 24 runs (and fixing `run.sh`, commit cc36fe9), 04-analysis was shown to have **no actual file changes in any model**, so C4=0 was purely a measurement artifact.
+- **Judgment variance**: The judging LLM can vary by about +/-1 point on the same transcript (confirmed by comparing first grading vs regrading). With n=8 per condition, mean differences around +/-0.3 should not be interpreted.
+- The benchmark has only 4 tasks, all small in scale (minutes to complete). The long-running, multi-step tasks where Fable 5 is expected to gain the most are untested. Conversely, **the gap appears even on small tasks**.
 
-## 示唆と次の一手
+## Implications and Next Steps
 
-1. **注入位置の格上げ**: カーネルを SessionStart の additionalContext ではなく `--append-system-prompt`(または settings の systemPrompt 相当)で注入して再測定する。指示追従はコンテキスト内の位置に敏感。
-2. **ハードゲートの構造化**: 「完了宣言前に verifier」をモデルの自発性に任せず、Stop フック(完了時に検証未実施なら差し戻す)として harness 側で強制する。これはプロンプトではなく機構なので、発火率100%にできる。
-3. **対話型セッションでの検証**: 本 harness の主戦場は対話型の Claude Code セッション(スキル・エージェントがフルに機能する環境)。ヘッドレス単発ターンは harness に最も不利な条件だった。対話型での A/B 観察を次に行う。
-4. C2 に絞った軽量介入(タスクプロンプト末尾に検証要求を1行足す)との比較も安価で有益。
+1. **Promote the injection location**: Re-measure with the kernel injected via `--append-system-prompt` (or a settings-level system prompt equivalent), not SessionStart additional context. Instruction-following is sensitive to context position.
+2. **Structure the hard gate mechanically**: Do not rely on the model to voluntarily call a verifier before completion. Enforce it as a Stop hook that bounces completion if verification has not happened. This is mechanism, not prompting, so it can reach a 100% fire rate.
+3. **Test interactive sessions**: The harness is meant for interactive Claude Code sessions where skills and agents can fully operate. Headless single-turn mode is the least favorable condition for it. Interactive A/B observation should come next.
+4. A lightweight C2-only intervention, such as appending a one-line verification requirement to the task prompt, would also be cheap and informative.
 
-## v2 追試(2026-07-05 追記)
+## v2 Follow-Up (2026-07-05 Addendum)
 
-v1 の弱点4実行(03-r1=6、02-r1=8、02-r2=8、01-r1=9)の判定根拠を精査すると、全てに共通する根本原因は「**フルスイート未実行/テストによる固定なしでの完了宣言**」(C2=1)だった。上記「次の一手」の 1 と 2 を harness v2 として実装した:
+Reviewing the judging rationale for the four weak v1 runs (03-r1=6, 02-r1=8, 02-r2=8, 01-r1=9) showed one shared root cause: **completion claims without running the full suite and without pinning behavior through tests** (C2=1). The first two next steps above were implemented as harness v2:
 
-1. **Stopフックによる機構的強制**(`hooks/stop-verify.sh`): 完了しようとした時点で transcript にフルスイート実行(裸の `pytest`。単一ファイル・`-k` 指定は不可)の証拠がなければ差し戻す。2回目の停止は無条件通過(無限ループ防止)
-2. **注入位置の格上げ**: カーネルを SessionStart の additionalContext ではなく `--append-system-prompt` で注入(eval の `on2` モード)
-3. **完了ゲートの明文化**: カーネルに「フルスイート実行→挙動変更はテストで固定→可能なら fresh-verify→カバーした範囲だけ verified と言う」の4段を明記
+1. **Mechanical enforcement via Stop hook** (`hooks/stop-verify.sh`): When the model tries to finish, the transcript must contain evidence of a full-suite run (bare `pytest`; single-file and `-k` runs do not count), or the hook bounces the completion. The second stop is allowed unconditionally to avoid infinite loops.
+2. **Promoted injection location**: The kernel is injected through `--append-system-prompt`, not SessionStart additional context (eval `on2` mode).
+3. **Explicit completion gate**: The kernel now spells out four steps: run the full suite, pin behavior changes with tests, run fresh-verify when possible, and claim only the verified scope.
 
-### v2 結果(4タスク × 2反復 = 8実行)
+### v2 Results (4 tasks x 2 repetitions = 8 runs)
 
-| 条件 | 平均総合 (n=8) | sd | C1 | C2 | C3 | C4 | C5 |
+| Condition | Mean total (n=8) | sd | C1 | C2 | C3 | C4 | C5 |
 |---|---|---|---|---|---|---|---|
-| Fable 5 素 | 9.88 | 0.35 | 2.00 | 2.00 | 2.00 | 1.88 | 2.00 |
-| Opus 4.8 素 | 8.62 | 1.30 | 1.75 | 1.25 | 2.00 | 1.75 | 1.88 |
+| Bare Fable 5 | 9.88 | 0.35 | 2.00 | 2.00 | 2.00 | 1.88 | 2.00 |
+| Bare Opus 4.8 | 8.62 | 1.30 | 1.75 | 1.25 | 2.00 | 1.75 | 1.88 |
 | Opus 4.8 + harness v1 | 8.88 | 1.46 | 1.88 | 1.50 | 2.00 | 1.75 | 1.75 |
 | **Opus 4.8 + harness v2** | **9.88** | **0.35** | **2.00** | **2.00** | **2.00** | **1.88** | **2.00** |
 
-- **v1で非満点だった4実行に対応する再実行は全て改善**: 03: {6,10}→{10,10}、02: {8,8}→{9,10}、01: {9,10}→{10,10}、04: {10,10}→{10,10}
-- C2(完了前検証)は 1.50 → **2.00**(全実行でフルスイート実行を確認)
-- 機構の動作実績: 8実行中、モデルが自発的にフルスイートを回したのが7回(system promptカーネルの効果)、Stopフックが差し戻して検証させたのが1回(02-r1 — 差し戻し後、新テストを旧コードに対して失敗させてから修正を固定するところまで実施)
-- v2実行コスト: $1.74(8実行、1本あたり $0.18〜0.29)
-- 注意: 判定LLMの揺らぎと n=8 は v1 と同様。「Fable 5 と完全同値」ではなく「この4プローブでは区別できない水準に到達」が正確な表現
+- **Every rerun corresponding to a non-perfect v1 run improved**: 03: {6,10}->{10,10}, 02: {8,8}->{9,10}, 01: {9,10}->{10,10}, 04: {10,10}->{10,10}
+- C2 (pre-completion verification) rose from 1.50 to **2.00**; every run showed evidence of a full-suite run.
+- Mechanism behavior: in 7 of 8 runs, the model ran the full suite voluntarily (system-prompt kernel effect). In 1 run, the Stop hook bounced the completion and forced verification (02-r1). After the bounce, the model ran the new test against the old code to prove failure before fixing it.
+- v2 run cost: $1.74 for 8 runs ($0.18-$0.29 per run)
+- Caveat: judging variance and n=8 still apply. The precise claim is not "identical to Fable 5 in general", but "indistinguishable on these four probes."
 
-### 結論の更新
+### Updated Conclusion
 
-「カーネル注入だけでは行動は変わらない」という v1 の診断は正しく、**規律は指示ではなく機構(system prompt + Stopフック)として与えれば、Opus 4.8 は本ベンチマークで Fable 5 素と同水準に到達する**。残る差分は本質的にはコスト/レイテンシ(v2 は verifierなしでもフルスイート実行1回分のターンを追加消費)と、未検証の長時間・多段タスク領域。
+The v1 diagnosis was correct: kernel injection alone did not change behavior. **When discipline is delivered as mechanism (system prompt + Stop hook), not mere instruction, Opus 4.8 reaches the same level as bare Fable 5 on this benchmark.** The remaining differences are mainly cost/latency (v2 adds at least one full-suite verification turn even without verifier use) and the untested space of long-running, multi-step tasks.
 
-## 生データ
+## Raw Data
 
-- 各実行: `eval/results/<run-id>/scores.json`(コミット済み)、transcript.jsonl(ローカルのみ)
-- 集計・可視化: `report.html`(`python3 eval/report.py` で再生成可能)
+- Runs: `eval/results/<run-id>/scores.json` (committed), `transcript.jsonl` (local only)
+- Aggregation and visualization: `report.html` (regenerate with `python3 eval/report.py`)

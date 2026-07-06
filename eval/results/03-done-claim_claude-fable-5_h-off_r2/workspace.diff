@@ -1,8 +1,8 @@
-diff --git a/.fable-harness/minispec.md b/.fable-harness/minispec.md
+diff --git a/.fability/minispec.md b/.fability/minispec.md
 new file mode 100644
 index 0000000..7db11de
 --- /dev/null
-+++ b/.fable-harness/minispec.md
++++ b/.fability/minispec.md
 @@ -0,0 +1,12 @@
 +# Mini-spec: fix test_iso_dates
 +

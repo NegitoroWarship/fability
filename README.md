@@ -1,6 +1,8 @@
-# fable-harness
+# fability
 
 A Claude Code harness that closes the discipline gap between Claude Opus 4.8 and Claude Fable 5 — by mechanism, not by prompt.
+
+Fability is a harness for pushing Opus 4.8 closer to Fable 5 behavior by turning Fable-like discipline into explicit protocols, system-prompt injection, and hook-level enforcement.
 
 日本語版: [README.ja.md](README.ja.md)
 
@@ -15,7 +17,11 @@ Discipline benchmark: 4 tasks × 5-criterion rubric × 8 runs per condition, sco
 | Opus 4.8 + harness v1 (prompt injection only) | 8.88 | 1.46 |
 | **Opus 4.8 + harness v2** | **9.88** | **0.35** |
 
-On this benchmark, Opus 4.8 + harness v2 scores identical to bare Fable 5 — down to the per-criterion means. Full aggregation and charts: [`eval/results/summary.md`](eval/results/summary.md) (Japanese) and `eval/results/report.html` (open in a browser).
+On this benchmark, Opus 4.8 + harness v2 scores identical to bare Fable 5 — down to the per-criterion means.
+
+[![Mean total score by condition: harness v2 matches bare Fable 5](eval/results/score-summary.svg)](eval/results/report.html)
+
+Figure: mean total score by condition; dots are individual runs. Open the full interactive report: [`eval/results/report.html`](eval/results/report.html). Full written analysis: [`eval/results/summary.md`](eval/results/summary.md).
 
 The v1→v2 delta is the project's central finding: **discipline must be delivered as mechanism, not instruction.**
 
@@ -37,9 +43,36 @@ Fable 5's prompting guide is effectively a catalog of behaviors Fable 5 exhibits
 
 ## Install
 
-1. Run `./install.sh` (symlinks into ~/.claude/skills and ~/.claude/agents)
+1. Run `./install.sh` (installs skills with `npx skills add` into `~/.claude/skills`, then symlinks agents into `~/.claude/agents`)
 2. Merge the printed settings fragment into ~/.claude/settings.json
 3. Start a new Claude Code session
+
+To install only the skills directly with `npx` from this repository root:
+
+```bash
+npx --yes skills@latest add . \
+  --global \
+  --agent claude-code \
+  --skill '*' \
+  --full-depth \
+  --yes
+```
+
+This leaves unrelated existing skills alone. A same-named installed skill may be updated.
+
+## Uninstall
+
+Remove the fability skills with `npx`:
+
+```bash
+npx --yes skills@latest remove \
+  deep-insight fresh-verify grounded-report long-run session-memory spec-first \
+  --global \
+  --agent claude-code \
+  --yes
+```
+
+Do not use `--all` or `--skill '*'` unless you intend to remove all matching skills. The `npx skills remove` command does not remove the `~/.claude/agents` symlinks or settings entries; remove those separately if needed.
 
 ## Running the evaluation
 
@@ -54,6 +87,6 @@ python3 eval/report.py                                 # regenerate aggregation 
 
 ## Documents
 
-- Design spec: `docs/specs/2026-07-05-fable-harness-design.md` (Japanese)
-- Implementation plan: `docs/plans/2026-07-05-fable-harness.md` (Japanese)
-- Experiment results & diagnosis: `eval/results/summary.md` (Japanese)
+- Design spec: `docs/specs/2026-07-05-fability-design.md` (Japanese)
+- Implementation plan: `docs/plans/2026-07-05-fability.md` (Japanese)
+- Experiment results & diagnosis: `eval/results/summary.md`

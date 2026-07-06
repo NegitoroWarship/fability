@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate eval/results/report.html: inline-SVG charts + tables from scores.json files.
+"""Generate eval/results/report.html and score-summary.svg from scores.json files.
 
 Stdlib only. Palette and mark specs follow the dataviz reference instance
 (validated: light #2a78d6/#1baf7a/#eda100, dark #3987e5/#199e70/#c98500;
@@ -13,18 +13,37 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 CONDITIONS = [
-    ("claude-fable-5", "h-off", "Fable 5 (素)"),
-    ("claude-opus-4-8", "h-off", "Opus 4.8 (素)"),
+    ("claude-fable-5", "h-off", "Fable 5 (bare)"),
+    ("claude-opus-4-8", "h-off", "Opus 4.8 (bare)"),
     ("claude-opus-4-8", "h-on", "Opus 4.8 + harness v1"),
     ("claude-opus-4-8", "h-on2", "Opus 4.8 + harness v2"),
 ]
 CRITERIA = [
-    ("c1", "C1 証拠接地"),
-    ("c2", "C2 検証実施"),
-    ("c3", "C3 調査先行"),
-    ("c4", "C4 スコープ遵守"),
-    ("c5", "C5 結果正確性"),
+    ("c1", "C1 Evidence"),
+    ("c2", "C2 Verification"),
+    ("c3", "C3 Investigation"),
+    ("c4", "C4 Scope"),
+    ("c5", "C5 Correctness"),
 ]
+
+LABEL_LINES = {
+    "Fable 5 (bare)": ("Fable 5", "(bare)"),
+    "Opus 4.8 (bare)": ("Opus 4.8", "(bare)"),
+    "Opus 4.8 + harness v1": ("Opus 4.8", "+ harness v1"),
+    "Opus 4.8 + harness v2": ("Opus 4.8", "+ harness v2"),
+}
+
+SVG_STYLE = """
+<style>
+.bg { fill: #fcfcfb; }
+.grid { stroke: #e1e0d9; stroke-width: 1; }
+.axis { stroke: #c3c2b7; stroke-width: 1; }
+.tick { fill: #898781; font-size: 12px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-variant-numeric: tabular-nums; }
+.vlabel { fill: #52514e; font-size: 13px; font-weight: 600; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+.s1 { fill: #2a78d6; } .s2 { fill: #1baf7a; } .s3 { fill: #eda100; } .s4 { fill: #008300; }
+.dot { stroke: #fcfcfb; stroke-width: 2; }
+</style>
+"""
 
 
 def load_runs():
@@ -60,7 +79,7 @@ def bar_path(x, y_top, w, h, r=4):
     )
 
 
-def chart_total(runs):
+def chart_total(runs, standalone=False):
     """Chart A: mean total per condition (columns) + per-run dots."""
     W, H = 660, 330
     ml, mr, mt, mb = 46, 16, 18, 46
@@ -70,7 +89,7 @@ def chart_total(runs):
     def sy(v):
         return mt + ph * (1 - v / ymax)
 
-    parts = []
+    parts = ['<rect class="bg" x="0" y="0" width="660" height="330"/>'] if standalone else []
     for g in range(0, 11, 2):
         y = sy(g)
         parts.append(f'<line class="grid" x1="{ml}" y1="{y:.1f}" x2="{ml + pw}" y2="{y:.1f}"/>')
@@ -86,7 +105,7 @@ def chart_total(runs):
         cx = ml + band * (i + 0.5)
         parts.append(
             f'<path class="s{i + 1} mark" d="{bar_path(cx - bw / 2, sy(mean), bw, ph * mean / ymax)}"'
-            f' data-tip="{html.escape(label)}: 平均 {mean:.2f} (n={len(totals)})"/>'
+            f' data-tip="{html.escape(label)}: mean {mean:.2f} (n={len(totals)})"/>'
         )
         parts.append(
             f'<text class="vlabel" x="{cx}" y="{sy(mean) - 8:.1f}" text-anchor="middle">{mean:.2f}</text>'
@@ -103,7 +122,7 @@ def chart_total(runs):
                     f'<circle class="dot s{i + 1} mark" cx="{cx + dx:.1f}" cy="{sy(val):.1f}" r="4.5"'
                     f' data-tip="{html.escape(label)}: total {val}"/>'
                 )
-        lines = label.replace(" + ", " +").split(" ", 1)
+        lines = LABEL_LINES.get(label, label.split(" ", 1))
         parts.append(
             f'<text class="tick" x="{cx}" y="{H - mb + 18}" text-anchor="middle">{html.escape(lines[0])}</text>'
         )
@@ -111,7 +130,9 @@ def chart_total(runs):
             parts.append(
                 f'<text class="tick" x="{cx}" y="{H - mb + 33}" text-anchor="middle">{html.escape(lines[1])}</text>'
             )
-    return f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="条件別の平均総合スコアと各実行の分布">{"".join(parts)}</svg>'
+    style = SVG_STYLE if standalone else ""
+    xmlns = ' xmlns="http://www.w3.org/2000/svg"' if standalone else ""
+    return f'<svg{xmlns} viewBox="0 0 {W} {H}" role="img" aria-label="Mean total score by condition with per-run distribution">{style}{"".join(parts)}</svg>'
 
 
 def chart_criteria(runs):
@@ -149,7 +170,7 @@ def chart_criteria(runs):
         parts.append(
             f'<text class="tick" x="{ml + band * (gi + 0.5):.1f}" y="{H - mb + 18}" text-anchor="middle">{html.escape(clabel)}</text>'
         )
-    return f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="観点別平均スコア(条件×C1〜C5)">{"".join(parts)}</svg>'
+    return f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="Mean criterion score by condition and criterion">{"".join(parts)}</svg>'
 
 
 def stat_tiles(runs):
@@ -168,7 +189,7 @@ def stat_tiles(runs):
         elif h in ("h-on", "h-on2"):
             d = m - means[("claude-opus-4-8", "h-off")]
             cls = "pos" if d >= 0 else "neg"
-            delta = f'<div class="delta {cls}">{d:+.2f} vs Opus 4.8 素</div>'
+            delta = f'<div class="delta {cls}">{d:+.2f} vs Opus 4.8 bare</div>'
         tiles.append(
             f'<div class="tile"><div class="tlabel"><span class="key s{i + 1}bg"></span>{html.escape(label)}</div>'
             f'<div class="tvalue">{m:.2f}<span class="tmax">/10</span></div>'
@@ -179,7 +200,7 @@ def stat_tiles(runs):
 
 def task_table(runs):
     tasks = sorted({r["task"] for r in runs})
-    head = "<tr><th>タスク</th>" + "".join(
+    head = "<tr><th>Task</th>" + "".join(
         f'<th><span class="key s{i + 1}bg"></span>{html.escape(l)}</th>' for i, (_, _, l) in enumerate(CONDITIONS)
     ) + "</tr>"
     body = []
@@ -296,31 +317,35 @@ def main():
     runs = load_runs()
     assert len(runs) >= 24, f"expected at least 24 runs, got {len(runs)}"
     doc = f"""<!DOCTYPE html>
-<html lang="ja"><head><meta charset="utf-8">
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>fable-harness 検証実験レポート</title>
+<title>fability Evaluation Report</title>
 <style>{CSS}</style></head>
 <body class="viz-root">
-<h1>fable-harness 検証実験</h1>
-<p class="sub">3条件 × 4タスク × 2反復 = 24実行 · 採点: Sonnet 5 ブラインド判定 + 機械チェック(rubric 5観点 各0–2点)</p>
+<h1>fability Evaluation</h1>
+<p class="sub">3 conditions x 4 tasks x 2 repetitions = 24 runs · Scoring: blind Sonnet 5 judgment + mechanical checks (5 rubric criteria, 0-2 points each)</p>
 {stat_tiles(runs)}
-<h2>条件別 平均総合スコア(点は各実行)</h2>
+<h2>Mean Total Score by Condition (dots are individual runs)</h2>
 {legend()}
 <div class="card">{chart_total(runs)}</div>
-<h2>観点別 平均スコア</h2>
+<h2>Mean Score by Criterion</h2>
 {legend()}
 <div class="card">{chart_criteria(runs)}</div>
-<h2>タスク別 平均総合スコア</h2>
+<h2>Mean Total Score by Task</h2>
 <div class="card">{task_table(runs)}</div>
-<details><summary>全24実行の生スコア(テーブルビュー)</summary>
+<details><summary>Raw scores for all 24 runs (table view)</summary>
 <div class="card">{run_table(runs)}</div></details>
-<p class="note">注: n=8/条件・判定LLMの揺らぎがあるため差は参考値。verifier列 = fresh-verify検証エージェントの発動有無(機械検出)。</p>
+<p class="note">Note: differences should be interpreted cautiously because n=8 per condition and the judging LLM has variance. The verifier column indicates whether the fresh-verify agent was mechanically detected.</p>
 <div id="tip"></div>
 <script>{JS}</script>
 </body></html>"""
     out = ROOT / "results" / "report.html"
     out.write_text(doc)
+    svg = chart_total(runs, standalone=True)
+    svg_out = ROOT / "results" / "score-summary.svg"
+    svg_out.write_text(svg)
     print(f"wrote {out} ({len(doc)} bytes)")
+    print(f"wrote {svg_out} ({len(svg)} bytes)")
 
 
 if __name__ == "__main__":

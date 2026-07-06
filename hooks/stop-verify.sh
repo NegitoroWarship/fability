@@ -63,7 +63,7 @@ if verified:
 print(json.dumps({
     "decision": "block",
     "reason": (
-        "HARD GATE (fable-harness): no full-test-suite run found in this "
+        "HARD GATE (fability): no full-test-suite run found in this "
         "session. Before finishing: (1) run the COMPLETE test suite from the "
         "workspace root (bare `pytest` — every test file; a single-file or "
         "-k run does not count); (2) if you changed any source behavior, add "
